@@ -1,24 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
-import { getUsers } from '../utils/axios';
-import ChatPage from './ChatPage';
-const MainRoom = ({ socket, user }) => {
-  const [users, setUsers] = useState([]);
-  const navigate = useNavigate();
-
-  const getAge = (dateString) => {
-    const today = new Date();
-    const birthDate = new Date(dateString);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    return age;
-  };
+const MainRoom = () => {
+  const { getUsers, user } = useAuth();
+  const [users, setUsers] = useState();
+  console.log('user', user);
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -27,47 +15,57 @@ const MainRoom = ({ socket, user }) => {
     };
     getAllUsers();
   }, []);
+  if (!users) return;
+  const filteredUser = users.filter((e) => e.email === user.email);
+  const filteredUsers = users.filter((e) => e.email !== user.email);
+  console.log('filters', filteredUser);
+  console.log('users', users);
   return (
     <>
-      <div className="row">
-        <Link to="/your-profile" className="text-center text-decoration-none">
-          Your profile
-        </Link>
+      <div className="my-profile">
+        <div className="user-container ">
+          <div className="min-height">
+            <img
+              src={filteredUser[0].image}
+              alt={`${filteredUser[0].name} image`}
+            />
+          </div>
+
+          <div className="my-card-body">
+            <ul className="my-ul">
+              <li className="text-light">{filteredUser[0].name}</li>
+            </ul>
+            <Link to={`/me/${user.email}`} className="link">
+              Edit your profile
+            </Link>
+          </div>
+        </div>
       </div>
-      <div className="row">
-        {users.map((user, index) => {
+
+      <div className="users">
+        {filteredUsers.map((user, index) => {
           if (user !== null) {
             return (
-              <div
-                key={index}
-                className="card col col-4 mx-3 my-3"
-                style={{ width: '18rem' }}
-              >
-                <img
-                  src={user.img}
-                  className="card-img-top"
-                  alt={`${user.name} image`}
-                />
-                <h2 className="text-center">{user.name}</h2>
+              <div className="users-container" key={index}>
+                <div className="min-height">
+                  <img src={user.image} alt={`${user.name} image`} />
+                </div>
+
                 <div className="card-body">
-                  {/* <p className="card-text">{user.aboutMe}</p> */}
-                  <ul className="list-group list-group-flush">
-                    <li className="list-group-item">{user.gender}</li>
-                    <li className="list-group-item">age: {getAge(user.age)}</li>
-                    {/* <li className="list-group-item">height: {user.height}</li>
-  
-                      <li className="list-group-item">weight: {user.weight}</li> */}
-                    <Link className="text-center" to="/private">
-                      Send private message
-                    </Link>
+                  <ul className="ul">
+                    <li>
+                      {user.name}, {user.age}
+                    </li>
                   </ul>
                 </div>
+                <Link className="link" to="/private">
+                  Send private message
+                </Link>
               </div>
             );
           }
         })}
       </div>
-      <ChatPage socket={socket} />
     </>
   );
 };

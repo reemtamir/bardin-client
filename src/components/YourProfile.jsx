@@ -1,41 +1,45 @@
-import React from 'react';
-import joi from 'joi';
-import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
-import { useFormik } from 'formik';
-import { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import { useFormik } from 'formik';
+import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import Input from './Input';
-import Joi from 'joi';
-const SignUp = () => {
-  const { signUp } = useAuth();
+import joi from 'joi';
 
-  const [error, setError] = useState('');
+import { Link } from 'react-router-dom';
+const YourProfile = () => {
+  const { myProfile, user, updateUser } = useAuth();
+  const [userCard, setUserCard] = useState('');
   const navigate = useNavigate();
+  useEffect(() => {
+    const getMyProfile = async () => {
+      const { data } = await myProfile(user.email);
+      setUserCard(data);
+      return userCard;
+    };
+    getMyProfile();
+  }, [user]);
+  useEffect(() => {
+    if (!userCard) return;
+    const { name, email, age, image, password, gender } = userCard;
+    form.setValues({
+      name,
+      email,
+      age,
+      image,
+      password,
+      gender,
+    });
+  }, [userCard]);
+
   const form = useFormik({
     validateOnMount: true,
     initialValues: {
       name: '',
       email: '',
-      password: '',
-      confirmedPassword: '',
       age: '',
-      gender: '',
       image: '',
-    },
-    async onSubmit(values) {
-      try {
-        let { confirmedPassword, image, ...rest } = values;
-        const userImage =
-          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-        if (!image) {
-          image = userImage;
-        }
-        await signUp({ ...rest, image });
-        navigate('/sign-in');
-      } catch ({ response }) {
-        setError(response);
-      }
+      gender: '',
     },
     validate: formikValidateUsingJoi({
       name: joi.string().min(3).max(255).required(),
@@ -48,20 +52,36 @@ const SignUp = () => {
       password: joi.string().min(6).max(1024).required().label('password'),
       confirmedPassword: joi
         .any()
-        .equal(joi.ref('password'))
         .required()
+        .equal(joi.ref('password'))
+
         .label('Confirm password')
         .options({ messages: { 'any.only': '{{#label}} does not match' } }),
       gender: joi.string(),
       age: joi.string(),
-      image: Joi.string().allow(''),
+      image: joi.string().allow(''),
     }),
-  });
 
+    async onSubmit(values) {
+      let { confirmedPassword, image, ...body } = values;
+      const userImage =
+        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+      if (!image) {
+        image = userImage;
+      }
+      try {
+        await updateUser(user.email, { ...body, image });
+
+        navigate('/chat-room');
+      } catch ({ response }) {
+        console.log(response.data);
+      }
+    },
+  });
+  console.log(user);
   return (
     <>
       <form noValidate onSubmit={form.handleSubmit}>
-        {error && <div className="alert alert-danger">{error}hh</div>}
         <div className="container">
           {' '}
           <Input
@@ -77,11 +97,11 @@ const SignUp = () => {
         </div>
         <div className="container">
           <Input
+            readOnly={true}
             label={'Email'}
             type="email"
             id="email"
             value={form.email}
-            placeholder="Enter email"
             labelClass={'label'}
             inputClass={'input'}
             {...form.getFieldProps('email')}
@@ -110,7 +130,7 @@ const SignUp = () => {
             type="password"
             id="confirm-password"
             value={form.confirmedPassword}
-            placeholder="fix rgx password"
+            placeholder="Confirm Password"
             labelClass={'label'}
             inputClass={'input'}
             error={
@@ -118,7 +138,6 @@ const SignUp = () => {
             }
           />
         </div>
-
         <div className="flex-row">
           <div className="container">
             <Input
@@ -126,7 +145,7 @@ const SignUp = () => {
               label={'Male'}
               type="radio"
               value={'male'}
-              labelClass={'label fs-5'}
+              labelClass={'label'}
               inputClass={'input'}
               error={form.touched.gender && form.errors.gender}
               name="gender"
@@ -138,7 +157,7 @@ const SignUp = () => {
               label={'Female'}
               type="radio"
               value={'female'}
-              labelClass={'label fs-5'}
+              labelClass={'label'}
               inputClass={'input'}
               error={form.touched.gender && form.errors.gender}
               name="gender"
@@ -150,7 +169,7 @@ const SignUp = () => {
               label={'Non Binary'}
               type="radio"
               value={'non-binary'}
-              labelClass={'label fs-5'}
+              labelClass={'label'}
               inputClass={'input'}
               error={form.touched.gender && form.errors.gender}
               name="gender"
@@ -164,8 +183,8 @@ const SignUp = () => {
             label={'Date of birth'}
             type="date"
             id="age"
-            labelClass={'label fs-4'}
-            inputClass={'input w-25 fs-5'}
+            labelClass={'label'}
+            inputClass={'input w-25 fs-4'}
             error={form.touched.age && form.errors.age}
           />
         </div>
@@ -176,20 +195,20 @@ const SignUp = () => {
             label={'Image'}
             type="text"
             id="image"
-            placeholder="fix upload image"
             labelClass={'label'}
-            inputClass={'input'}
+            inputClass={'input fs-5'}
             error={form.touched.image && form.errors.image}
           />
-        </div>
-        <div className="container">
           <button type="submit" className="sign-up-btn">
-            Sing Up
+            Save changes
           </button>
         </div>
       </form>
+      <Link className="link text-danger fs-3 m-auto" to={`/delete/${user.email}`}>
+        <i className="bi bi-trash3-fill "></i> Delete your account
+      </Link>
     </>
   );
 };
 
-export default SignUp;
+export default YourProfile;

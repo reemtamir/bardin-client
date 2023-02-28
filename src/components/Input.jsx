@@ -17,7 +17,13 @@ const Input = ({
           {label}
         </label>
         {rest.required && <span className="text-danger ms-1">*</span>}
-        <input {...rest} type={type} className={inputClass} id={id} />
+        <input
+          {...rest}
+          type={type}
+          className={inputClass}
+          id={id}
+          value={value}
+        />
 
         <span>{error}</span>
       </div>

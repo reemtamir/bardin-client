@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import MainRoom from './MainRoom';
 
 const ChatBar = ({ socket }) => {
-  const [users, setUsers] = useState([]);
+  const { getUsers } = useAuth();
+  const [users, setUsers] = useState();
+
+  useEffect(() => {
+    const getAllUsers = async function () {
+      const data = await getUsers();
+
+      setUsers(data);
+    };
+
+    getAllUsers();
+  }, []);
 
   useEffect(() => {
     socket.on('newUserResponse', (data) => {
-      setUsers(data);
+      // setUsers(data);
     });
   }, [socket, users]);
+  if (!users) return;
   return (
-    <div className="chat__sidebar">
-      <div>
-        <h4 className="chat__header">ACTIVE USERS</h4>
-        <div className="chat__users">
-          {users.map((user, index) => (
-            <p key={index}>{user.userName}</p>
-          ))}
-        </div>
-      </div>
+    <div className="container">
+      <MainRoom />
     </div>
   );
 };

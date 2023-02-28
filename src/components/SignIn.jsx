@@ -1,75 +1,87 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from './Input';
-import { signIn } from '../utils/axios';
+import { useAuth } from '../hooks/useAuth';
+import joi from 'joi';
+import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
+import { useFormik } from 'formik';
 
-const SignIn = ({ setUser, socket }) => {
-  const [userConfirmation, setUserConfirmation] = useState(null);
+const SignIn = ({ socket }) => {
+  const { user, logIn } = useAuth();
 
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const form = useFormik({
+    validateOnMount: true,
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    async onSubmit(values) {
+      try {
+        const user = await logIn(values);
+        socket.emit('newUser', { userName: user.email, socketID: socket.id });
+        console.log('socket', socket);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    validate: formikValidateUsingJoi({
+      email: joi
+        .string()
+        .min(6)
+        .max(255)
+        .required()
+        .email({ tlds: { allow: false } }),
+      password: joi.string().min(6).max(1024).required(),
+    }),
+  });
 
-  const handelSignIn = async (values) => {
-    try {
-      const data = await signIn(values);
-      setUser(data);
-      localStorage.setItem('user', JSON.stringify(data));
-      let user = localStorage.getItem('user');
-
-      user = JSON.parse(user);
-      console.log(user);
-      socket.emit('newUser', { userName: user.name, socketID: socket.id });
-      navigate('/main-room');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => {
+    if (!user) return;
+    navigate('/chat-room');
+  }, [user]);
 
   return (
     <>
-      <form noValidate>
-        <div className="row w-50 mt-5 m-auto ">
-          <div className=" col-12 my-2 ">
+      <form noValidate onSubmit={form.handleSubmit}>
+        <div className=" container ">
+          <div className=" input-div ">
             <Input
-              label="Email"
+              label={'Email'}
               type="email"
               id="email"
-              labelClass="visually-hidden"
-              inputClass="form-control text-center"
-              placeholder="Email"
-              onChange={({ target: { value: email } }) => {
-                setUserConfirmation({ ...userConfirmation, email });
-              }}
+              value={form.email}
+              placeholder="Enter email"
+              labelClass={'label'}
+              inputClass={'input'}
+              {...form.getFieldProps('email')}
+              error={form.touched.email && form.errors.email}
             />
           </div>
-          <div className=" col-12 my-2 ">
+          <div className=" input-div ">
             <Input
-              label="Password"
+              {...form.getFieldProps('password')}
+              label={'Password'}
               type="password"
               id="password"
-              labelClass="visually-hidden"
-              inputClass="form-control text-center"
-              placeholder="Password"
-              onChange={({ target: { value: password } }) => {
-                setUserConfirmation({ ...userConfirmation, password });
-              }}
+              value={form.password}
+              placeholder="Choose Password"
+              labelClass={'label'}
+              inputClass={'input'}
+              error={form.touched.password && form.errors.password}
             />
           </div>
 
-          <div className=" col-12 my-2">
-            <button
-              onClick={() => handelSignIn(userConfirmation)}
-              type="button"
-              className="btn btn-primary"
-            >
-              Sign in
-            </button>
-          </div>
+          <button type="submit" className="sign-in-btn">
+            Sign in
+          </button>
         </div>
-        <div className="m-auto text-center mt-5">
-          <h2>Don't have an account? </h2>
-          <button className="btn btn-info">
+        <div className="container">
+          <h2 className="header">Don't have an account? </h2>
+          <button className="sign-up-btn">
             {' '}
-            <Link to="/sign-up" className="text-decoration-none text-dark">
+            <Link to="/sign-up" className="link-to-sign-up">
               {' '}
               sign up{' '}
             </Link>

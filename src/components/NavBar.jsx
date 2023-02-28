@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const NavBar = () => {
+  const { user } = useAuth();
+
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-light">
+      <nav className="navbar navbar-expand-lg bg-light w-80">
         <div className="container-fluid">
           <Link to={'/'} className="navbar-brand">
             <img
@@ -30,17 +33,42 @@ const NavBar = () => {
                   Home
                 </Link>
               </li>
+              {user && (
+                <li className="nav-item ">
+                  <Link
+                    to={'chat-room'}
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Main room
+                  </Link>
+                </li>
+              )}
             </ul>
             <ul className="navbar-nav ms-auto ">
-              <li className="nav-item ">
-                <Link
-                  to={'sign-in'}
-                  className="nav-link active"
-                  aria-current="page"
-                >
-                  Sign In
-                </Link>
-              </li>
+              {!user && (
+                <li className="nav-item ">
+                  <Link
+                    to={'sign-in'}
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Sign In
+                  </Link>
+                </li>
+              )}
+
+              {user && (
+                <li className="nav-item ">
+                  <Link
+                    to={'log-out'}
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Log Out
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>
