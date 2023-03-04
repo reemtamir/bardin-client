@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/bardin-client/static/css/main.52067ae0.css",
+    "main.js": "/bardin-client/static/js/main.d9595c74.js",
+    "static/js/787.c4e7f8f9.chunk.js": "/bardin-client/static/js/787.c4e7f8f9.chunk.js",
+    "static/media/bootstrap-icons.woff?": "/bardin-client/static/media/bootstrap-icons.6959d0d983ee318f8880.woff",
+    "static/media/bootstrap-icons.woff2?": "/bardin-client/static/media/bootstrap-icons.b2e5aab643c6f0fd2da6.woff2",
+    "index.html": "/bardin-client/index.html",
+    "main.52067ae0.css.map": "/bardin-client/static/css/main.52067ae0.css.map",
+    "main.d9595c74.js.map": "/bardin-client/static/js/main.d9595c74.js.map",
+    "787.c4e7f8f9.chunk.js.map": "/bardin-client/static/js/787.c4e7f8f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.52067ae0.css",
+    "static/js/main.d9595c74.js"
+  ]
+}
