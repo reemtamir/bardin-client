@@ -16,9 +16,7 @@ const MainRoom = () => {
 
   const filteredUser = users.filter((e) => e.email === user.email);
   const filteredUsers = users.filter((e) => e.email !== user.email);
-  function add({ target }) {
-    console.log(target.id);
-  }
+
   return (
     <>
       <div className="my-profile">
@@ -46,11 +44,10 @@ const MainRoom = () => {
                 <p
                   id={user._id}
                   onClick={async () => {
-                    const { data } = await addToFavorites(
+                    const data = await addToFavorites(
                       user._id,
                       filteredUser[0].email
                     );
-                    console.log('front', data);
                   }}
                 >
                   add to favorite

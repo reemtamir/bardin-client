@@ -1,6 +1,5 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import { useAuth } from '../hooks/useAuth';
 axios.defaults.baseURL = 'http://localhost:3000';
 setTokenHeader();
 export const signUp = async (values) => {
