@@ -4,6 +4,7 @@ import MainRoom from './MainRoom';
 
 const ChatBar = ({ socket }) => {
   const { getUsers } = useAuth();
+
   const [users, setUsers] = useState();
 
   useEffect(() => {
@@ -22,11 +23,7 @@ const ChatBar = ({ socket }) => {
     });
   }, [socket, users]);
   if (!users) return;
-  return (
-    <div className="container">
-      <MainRoom />
-    </div>
-  );
+  return <div className="container">{<MainRoom />}</div>;
 };
 
 export default ChatBar;

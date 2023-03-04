@@ -1,16 +1,18 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 const ChatBody = ({ messages, lastMessageRef, typingStatus }) => {
-  const { UseUser, user } = useAuth();
+  const { myProfile, user } = useAuth();
+
   const [onlineUser, setOnlineUser] = useState();
   useEffect(() => {
     const getUser = async function () {
-      const { data } = await UseUser(user.email);
+      const { data } = await myProfile(user._id);
       setOnlineUser(data);
     };
     getUser();
-  }, []);
+  }, [user]);
 
   // const handleLeaveChat = () => {
   //   localStorage.removeItem('user');

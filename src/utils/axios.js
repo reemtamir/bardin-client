@@ -9,17 +9,17 @@ export const signUp = async (values) => {
       ...values,
     });
   } catch ({ response }) {
-    console.log('response', response);
+    return response.data.error;
   }
 };
 export const signIn = async (values) => {
   try {
-    const { data } = await axios.post('/auth', values);
+    const { data } = await axios.post(`/auth`, values);
     localStorage.setItem('token', data);
     setTokenHeader();
     return data;
   } catch ({ response }) {
-    console.log('error', response);
+    console.log('error', response.data);
   }
 };
 export const getUsers = async () => {
@@ -33,8 +33,8 @@ export function setTokenHeader() {
   return (axios.defaults.headers.common['auth-token'] = getJwt());
 }
 
-export const myProfile = async (email) => {
-  return await axios.get(`/me/${email}`);
+export const myProfile = async (id) => {
+  return await axios.get(`/me/${id}`);
 };
 export function getUser() {
   try {
@@ -43,12 +43,12 @@ export function getUser() {
     return null;
   }
 }
-export async function UseUser(email) {
-  return axios.get(`/me/${email}`);
+export async function addToFavorites(id, email) {
+  return await axios.post(`/me/favorites/${id}`, { email });
 }
-export async function updateUser(email, user) {
-  return await axios.put(`/me/${email}`, user);
+export async function updateUser(id, user) {
+  return await axios.put(`/me/edit/${id}`, user);
 }
-export async function deleteUser(email) {
-  return await axios.delete(`/delete/${email}`);
+export async function deleteUser(id) {
+  return await axios.delete(`/me/delete/${id}`);
 }

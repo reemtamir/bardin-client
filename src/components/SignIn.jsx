@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Input from './Input';
 import { useAuth } from '../hooks/useAuth';
 import joi from 'joi';
@@ -20,10 +20,10 @@ const SignIn = ({ socket }) => {
     async onSubmit(values) {
       try {
         const user = await logIn(values);
-        socket.emit('newUser', { userName: user.email, socketID: socket.id });
-        console.log('socket', socket);
+        // socket.emit('newUser', { userName: user.email, socketID: socket.id });
+        // console.log('socket', socket);
       } catch (error) {
-        console.log(error);
+        setError(error);
       }
     },
     validate: formikValidateUsingJoi({
@@ -39,11 +39,12 @@ const SignIn = ({ socket }) => {
 
   useEffect(() => {
     if (!user) return;
-    navigate('/chat-room');
-  }, [user]);
+    navigate(`/chat-room/${user._id}`);
+  }, [user, navigate]);
 
   return (
     <>
+      {/* {error && <div>{error}</div>} */}
       <form noValidate onSubmit={form.handleSubmit}>
         <div className=" container ">
           <div className=" input-div ">
@@ -79,7 +80,7 @@ const SignIn = ({ socket }) => {
         </div>
         <div className="container">
           <h2 className="header">Don't have an account? </h2>
-          <button className="sign-up-btn">
+          <button type="submit" className="sign-up-btn">
             {' '}
             <Link to="/sign-up" className="link-to-sign-up">
               {' '}

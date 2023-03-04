@@ -2,24 +2,23 @@ import '../src/styles/main.scss';
 import '../src/styles/home.scss';
 import '../src/styles/sign-in.scss';
 import '../src/styles/sign-up.scss';
-import '../src/styles/main-room.scss';
 import '../src/styles/your-profile.scss';
+import '../src/styles/main-room.scss';
 
 import socketIO from 'socket.io-client';
 import { Route, Routes } from 'react-router-dom';
+import PrivateRout from './components/PrivateRout';
 import Home from './components/Home';
 import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
-import MainRoom from './components/MainRoom';
+
 import YourProfile from './components/YourProfile';
-import PrivateRout from './components/PrivateRout';
 import LogOut from './components/LogOut';
 import DeleteProfile from './components/DeleteProfile';
 import ChatPage from './components/ChatPage';
 
 const socket = socketIO.connect('http://localhost:3000');
-
 function App() {
   return (
     <>
@@ -33,7 +32,7 @@ function App() {
           <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
           <Route path="log-out" element={<LogOut socket={socket} />}></Route>
           <Route
-            path="chat-room"
+            path="chat-room/:id"
             element={
               <PrivateRout>
                 <ChatPage socket={socket} />
@@ -41,7 +40,7 @@ function App() {
             }
           ></Route>
           <Route
-            path="me/:email"
+            path="me/:id"
             element={
               <PrivateRout>
                 <YourProfile />
@@ -49,7 +48,7 @@ function App() {
             }
           ></Route>
           <Route
-            path="delete/:email"
+            path="delete/:id"
             element={
               <PrivateRout>
                 <DeleteProfile />

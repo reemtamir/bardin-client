@@ -2,14 +2,16 @@ import React from 'react';
 
 import { useAuth } from '../hooks/useAuth';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const ChatFooter = ({ socket }) => {
-  const { UseUser, user } = useAuth();
+  const { id } = useParams();
+  const { myProfile, user } = useAuth();
   const [message, setMessage] = useState('');
   const [onlineUser, setOnlineUser] = useState();
   useEffect(() => {
     const getUser = async function () {
-      const { data } = await UseUser(user.email);
+      const { data } = await myProfile(id);
       setOnlineUser(data);
       socket.emit('newUser', data);
     };

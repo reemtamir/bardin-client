@@ -8,9 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import Input from './Input';
 import Joi from 'joi';
 const SignUp = () => {
-  const { signUp } = useAuth();
+  const { signUp, error, setError } = useAuth();
 
-  const [error, setError] = useState('');
   const navigate = useNavigate();
   const form = useFormik({
     validateOnMount: true,
@@ -31,10 +30,12 @@ const SignUp = () => {
         if (!image) {
           image = userImage;
         }
+
         await signUp({ ...rest, image });
+
         navigate('/sign-in');
-      } catch ({ response }) {
-        setError(response);
+      } catch ({ error }) {
+        setError(error);
       }
     },
     validate: formikValidateUsingJoi({
@@ -61,7 +62,7 @@ const SignUp = () => {
   return (
     <>
       <form noValidate onSubmit={form.handleSubmit}>
-        {error && <div className="alert alert-danger">{error}hh</div>}
+        {error && <div className="alert alert-danger">{error}wwwwww</div>}
         <div className="container">
           {' '}
           <Input

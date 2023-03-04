@@ -5,13 +5,12 @@ import { deleteUser } from '../utils/axios';
 
 const DeleteProfile = () => {
   const navigate = useNavigate();
-  const { email } = useParams();
+  const { id } = useParams();
   const { logOut } = useAuth();
-  console.log(email);
+
   useEffect(() => {
-    if (!email) return;
     const remove = async () => {
-      await deleteUser(email);
+      await deleteUser(id);
       logOut();
       navigate('/sign-up');
     };

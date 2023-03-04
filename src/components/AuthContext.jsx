@@ -1,4 +1,3 @@
-import { warning } from '@remix-run/router';
 import React from 'react';
 import { createContext, useState } from 'react';
 import {
@@ -8,18 +7,17 @@ import {
   getUsers,
   myProfile,
   updateUser,
-  UseUser,
+  addToFavorites,
 } from '../utils/axios';
 export const context = createContext(null);
 const AuthContext = ({ children }) => {
   const [user, setUser] = useState(getUser());
-
+  const [error, setError] = useState('');
   function refreshUser() {
     setUser(getUser());
   }
   async function logIn(values) {
     const user = await signIn(values);
-    setUser('user', user);
     refreshUser();
     return user;
   }
@@ -40,7 +38,9 @@ const AuthContext = ({ children }) => {
           getUsers,
           myProfile,
           updateUser,
-          UseUser,
+          error,
+          setError,
+          addToFavorites,
         }}
       >
         {children}

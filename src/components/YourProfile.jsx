@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useFormik } from 'formik';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
@@ -13,22 +13,17 @@ const YourProfile = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const getMyProfile = async () => {
-      const { data } = await myProfile(user.email);
+      const { data } = await myProfile(user._id);
       setUserCard(data);
-      return userCard;
     };
     getMyProfile();
-  }, [user]);
+  }, [myProfile]);
+
   useEffect(() => {
     if (!userCard) return;
-    const { name, email, age, image, password, gender } = userCard;
+    const { age, _id, vip, createdAt, __v, ...rest } = userCard;
     form.setValues({
-      name,
-      email,
-      age,
-      image,
-      password,
-      gender,
+      ...rest,
     });
   }, [userCard]);
 
@@ -37,9 +32,11 @@ const YourProfile = () => {
     initialValues: {
       name: '',
       email: '',
-      age: '',
+
       image: '',
       gender: '',
+      password: '',
+      confirmedPassword: '',
     },
     validate: formikValidateUsingJoi({
       name: joi.string().min(3).max(255).required(),
@@ -50,15 +47,10 @@ const YourProfile = () => {
         .required()
         .email({ tlds: { allow: false } }),
       password: joi.string().min(6).max(1024).required().label('password'),
-      confirmedPassword: joi
-        .any()
-        .required()
-        .equal(joi.ref('password'))
+      confirmedPassword: joi.any().required().equal(joi.ref('password')),
 
-        .label('Confirm password')
-        .options({ messages: { 'any.only': '{{#label}} does not match' } }),
       gender: joi.string(),
-      age: joi.string(),
+
       image: joi.string().allow(''),
     }),
 
@@ -70,15 +62,15 @@ const YourProfile = () => {
         image = userImage;
       }
       try {
-        await updateUser(user.email, { ...body, image });
+        await updateUser(user._id, { ...body, image });
 
-        navigate('/chat-room');
+        navigate(`/chat-room/${user._id}`);
       } catch ({ response }) {
         console.log(response.data);
       }
     },
   });
-  console.log(user);
+
   return (
     <>
       <form noValidate onSubmit={form.handleSubmit}>
@@ -88,7 +80,6 @@ const YourProfile = () => {
             label={'Name'}
             type="text"
             id="name"
-            placeholder="Your user name"
             labelClass={'label'}
             inputClass={'input'}
             {...form.getFieldProps('name')}
@@ -104,6 +95,7 @@ const YourProfile = () => {
             value={form.email}
             labelClass={'label'}
             inputClass={'input'}
+            disabled
             {...form.getFieldProps('email')}
             error={form.touched.email && form.errors.email}
           />
@@ -177,7 +169,7 @@ const YourProfile = () => {
           </div>
         </div>
 
-        <div className="container">
+        {/* <div className="container">
           <Input
             {...form.getFieldProps('age')}
             label={'Date of birth'}
@@ -187,7 +179,7 @@ const YourProfile = () => {
             inputClass={'input w-25 fs-4'}
             error={form.touched.age && form.errors.age}
           />
-        </div>
+        </div> */}
 
         <div className="container">
           <Input
@@ -204,7 +196,7 @@ const YourProfile = () => {
           </button>
         </div>
       </form>
-      <Link className="link text-danger fs-3 m-auto" to={`/delete/${user.email}`}>
+      <Link className="link text-danger fs-3 m-auto" to={`/delete/${user._id}`}>
         <i className="bi bi-trash3-fill "></i> Delete your account
       </Link>
     </>

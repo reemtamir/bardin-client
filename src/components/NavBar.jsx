@@ -11,7 +11,7 @@ const NavBar = () => {
           <Link to={'/'} className="navbar-brand">
             <img
               style={{ width: '7rem', height: '3.5rem' }}
-              src="https://logos.flamingtext.com/City-Logos/Bardin-Logo.png"
+              src="https://logos.flamingtext.com/City-Logos/Bardin-Water-Logo.png"
               alt="logo"
             />
           </Link>
@@ -36,7 +36,7 @@ const NavBar = () => {
               {user && (
                 <li className="nav-item ">
                   <Link
-                    to={'chat-room'}
+                    to={`/chat-room/${user._id}`}
                     className="nav-link active"
                     aria-current="page"
                   >
