@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 const MainRoom = () => {
   const { getUsers, user, addToFavorites } = useAuth();
   const [users, setUsers] = useState();
+  const [addToFav, setAddToFav] = useState(false);
   useEffect(() => {
     const getAllUsers = async () => {
       const users = await getUsers();
@@ -41,17 +42,27 @@ const MainRoom = () => {
           if (user !== null) {
             return (
               <div className="users-container" key={index}>
-                <p
-                  id={user._id}
-                  onClick={async () => {
-                    const data = await addToFavorites(
-                      user._id,
-                      filteredUser[0].email
-                    );
-                  }}
-                >
-                  add to favorite
-                </p>
+                {!addToFav && (
+                  <i
+                    id={user._id}
+                    onClick={async () => {
+                      await addToFavorites(user._id, filteredUser[0].email);
+                      setAddToFav(!addToFav);
+                    }}
+                    className="bi bi-star "
+                  ></i>
+                )}
+                {addToFav && (
+                  <i
+                    className="bi bi-star-fill"
+                    id={user._id}
+                    onClick={async () => {
+                      // await addToFavorites(user._id, filteredUser[0].email);
+                      setAddToFav(!addToFav);
+                    }}
+                  ></i>
+                )}
+
                 <div className="min-height">
                   <img src={user.image} alt={`${user.name} `} />
                 </div>
