@@ -21,7 +21,8 @@ const YourProfile = () => {
 
   useEffect(() => {
     if (!userCard) return;
-    const { age, _id, vip, createdAt, __v,favorites, ...rest } = userCard;
+    console.log(userCard);
+    const { age, _id, vip, createdAt, __v, favorites, ...rest } = userCard;
     form.setValues({
       ...rest,
     });
@@ -32,7 +33,6 @@ const YourProfile = () => {
     initialValues: {
       name: '',
       email: '',
-
       image: '',
       gender: '',
       password: '',

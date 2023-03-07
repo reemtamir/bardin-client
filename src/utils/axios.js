@@ -21,6 +21,18 @@ export const signIn = async (values) => {
     console.log('error', response.data);
   }
 };
+export const getUsersById = async (usersId) => {
+  try {
+    const { data } = await axios.get('/users/get-by-id', {
+      params: {
+        usersIdList: usersId,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const getUsers = async () => {
   const { data } = await axios.get('/users');
   return data;
@@ -44,6 +56,9 @@ export function getUser() {
 }
 export async function addToFavorites(id, email) {
   return await axios.post(`/me/favorites/${id}`, { email });
+}
+export async function removeFromFavorites(id, email) {
+  return await axios.post(`/me/remove-favorites/${id}`, { email });
 }
 export async function updateUser(id, user) {
   return await axios.put(`/me/edit/${id}`, user);

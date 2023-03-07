@@ -44,6 +44,17 @@ const NavBar = () => {
                   </Link>
                 </li>
               )}
+              {user?.favorites.length ? (
+                <li className="nav-item ">
+                  <Link
+                    to={`/favorites`}
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Favorites
+                  </Link>
+                </li>
+              ) : null}
             </ul>
             <ul className="navbar-nav ms-auto ">
               {!user && (

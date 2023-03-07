@@ -1,87 +1,85 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 
+import { useAuth } from '../hooks/useAuth';
+import ShowUsers from './ShowUsers';
+import UserProfileDisplay from './UserProfileDisplay';
 const MainRoom = () => {
-  const { getUsers, user, addToFavorites } = useAuth();
+  const {
+    getUsers,
+    user,
+    addToFavoritesById,
+    removeFromFavoritesById,
+    getUsersById,
+    favoriteUsers,
+    setFavoriteUsers,
+  } = useAuth();
+
   const [users, setUsers] = useState();
-  const [addToFav, setAddToFav] = useState(false);
+
+  const [notFavoriteUsers, setNotFavoriteUsers] = useState();
+
   useEffect(() => {
     const getAllUsers = async () => {
       const users = await getUsers();
       setUsers(users);
     };
     getAllUsers();
-  }, [getUsers]);
-  if (!users) return;
+  }, [user]);
 
-  const filteredUser = users.filter((e) => e.email === user.email);
+  useEffect(() => {
+    const getFavoriteUsersById = async () => {
+      try {
+        const data = await getUsersById(favoriteUsersId);
+
+        setFavoriteUsers(data);
+      } catch (error) {
+        return null;
+      }
+    };
+    getFavoriteUsersById();
+  }, [users, user]);
+  useEffect(() => {
+    const getNotFavoriteUsersById = async () => {
+      try {
+        const data = await getUsersById(nonFavoriteUsersId);
+
+        setNotFavoriteUsers(data);
+      } catch (error) {
+        return null;
+      }
+    };
+    getNotFavoriteUsersById();
+  }, [users, user]);
+
+  if (!users) return null;
+
   const filteredUsers = users.filter((e) => e.email !== user.email);
+  let userFavorites = user.favorites;
+  let allUsers = filteredUsers.map((user) => user._id);
+  const favoriteUserSet = new Set(userFavorites);
+ const nonFavoriteUsersId = allUsers.filter((u) => !favoriteUserSet.has(u));
+  const favoriteUsersId = allUsers.filter((u) => favoriteUserSet.has(u));
+  const filteredUser = users.filter((e) => e.email === user.email);
+
+  const activeUser = filteredUser[0];
 
   return (
     <>
       <div className="my-profile">
-        <div className="user-container ">
-          <div className="min-height">
-            <img src={filteredUser[0].image} alt={`${filteredUser[0].name} `} />
-          </div>
-
-          <div className="my-card-body">
-            <ul className="my-ul">
-              <li className="text-light">{filteredUser[0].name}</li>
-            </ul>
-          </div>
-          <Link className="link" to={`/me/${user._id}`}>
-            Edit your profile
-          </Link>
-        </div>
+        <UserProfileDisplay activeUser={activeUser} />
       </div>
 
       <div className="users">
-        {filteredUsers.map((user, index) => {
-          if (user !== null) {
-            return (
-              <div className="users-container" key={index}>
-                {!addToFav && (
-                  <i
-                    id={user._id}
-                    onClick={async () => {
-                      await addToFavorites(user._id, filteredUser[0].email);
-                      setAddToFav(!addToFav);
-                    }}
-                    className="bi bi-star "
-                  ></i>
-                )}
-                {addToFav && (
-                  <i
-                    className="bi bi-star-fill"
-                    id={user._id}
-                    onClick={async () => {
-                      // await addToFavorites(user._id, filteredUser[0].email);
-                      setAddToFav(!addToFav);
-                    }}
-                  ></i>
-                )}
-
-                <div className="min-height">
-                  <img src={user.image} alt={`${user.name} `} />
-                </div>
-
-                <div className="card-body">
-                  <ul className="ul">
-                    <li>
-                      {user.name}, {user.age}
-                    </li>
-                  </ul>
-                </div>
-                <Link className="link" to="/private">
-                  Send private message
-                </Link>
-              </div>
-            );
-          }
-          return filteredUsers;
-        })}
+        <ShowUsers
+          users={favoriteUsers}
+          str={'bi bi-star-fill'}
+          fn={removeFromFavoritesById}
+        />
+        <ShowUsers
+          users={notFavoriteUsers}
+          str={'bi bi-star'}
+          fn={addToFavoritesById}
+        />
       </div>
     </>
   );

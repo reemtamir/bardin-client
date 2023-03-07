@@ -4,7 +4,7 @@ import '../src/styles/sign-in.scss';
 import '../src/styles/sign-up.scss';
 import '../src/styles/your-profile.scss';
 import '../src/styles/main-room.scss';
-
+import { useEffect } from 'react';
 import socketIO from 'socket.io-client';
 import { Route, Routes } from 'react-router-dom';
 import PrivateRout from './components/PrivateRout';
@@ -12,14 +12,19 @@ import Home from './components/Home';
 import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
-
+import FavoritesPrivateRout from './components/FavoritesPrivateRout';
 import YourProfile from './components/YourProfile';
 import LogOut from './components/LogOut';
 import DeleteProfile from './components/DeleteProfile';
 import ChatPage from './components/ChatPage';
-
-const socket = socketIO.connect('http://localhost:3000');
+import ShowUsers from './components/ShowUsers';
+import { useAuth } from './hooks/useAuth';
+const socket = socketIO.connect('http://localhost:3002');
 function App() {
+  const { favoriteUsers, removeFromFavoritesById } =
+    useAuth();
+  
+
   return (
     <>
       <header>
@@ -53,6 +58,20 @@ function App() {
               <PrivateRout>
                 <DeleteProfile />
               </PrivateRout>
+            }
+          ></Route>
+          <Route
+            path="favorites"
+            element={
+              <FavoritesPrivateRout>
+                <div className="users">
+                  <ShowUsers
+                    users={favoriteUsers}
+                    str={'bi bi-star-fill'}
+                    fn={removeFromFavoritesById}
+                  />
+                </div>
+              </FavoritesPrivateRout>
             }
           ></Route>
         </Routes>
