@@ -19,7 +19,7 @@ import DeleteProfile from './components/DeleteProfile';
 import ChatPage from './components/ChatPage';
 import ShowUsers from './components/ShowUsers';
 import { useAuth } from './hooks/useAuth';
-const socket = socketIO.connect('http://localhost:3002');
+const socket = socketIO.connect('http://localhost:3000');
 function App() {
   const { favoriteUsers, removeFromFavoritesById } =
     useAuth();
