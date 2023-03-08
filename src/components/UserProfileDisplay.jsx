@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const UserProfileDisplay = ({ activeUser }) => {
   const { user } = useAuth();
 
-  if (!user) return;
+  if (!user || !activeUser) return;
   return (
     <>
       <div className="user-container ">

@@ -12,9 +12,10 @@ const MainRoom = () => {
     getUsersById,
     favoriteUsers,
     setFavoriteUsers,
+    users, setUsers,
   } = useAuth();
 
-  const [users, setUsers] = useState();
+  // const [users, setUsers] = useState();
 
   const [notFavoriteUsers, setNotFavoriteUsers] = useState();
 
@@ -55,10 +56,10 @@ const MainRoom = () => {
 
   const filteredUsers = users.filter((e) => e.email !== user.email);
   let userFavorites = user.favorites;
-  let allUsers = filteredUsers.map((user) => user._id);
   const favoriteUserSet = new Set(userFavorites);
+  let allUsers = filteredUsers.map((user) => user._id);
  const nonFavoriteUsersId = allUsers.filter((u) => !favoriteUserSet.has(u));
-  const favoriteUsersId = allUsers.filter((u) => favoriteUserSet.has(u));
+ const favoriteUsersId = allUsers.filter((u) => favoriteUserSet.has(u));
   const filteredUser = users.filter((e) => e.email === user.email);
 
   const activeUser = filteredUser[0];

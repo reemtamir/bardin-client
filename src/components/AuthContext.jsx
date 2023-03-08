@@ -14,6 +14,7 @@ import {
 export const context = createContext(null);
 const AuthContext = ({ children }) => {
   const [user, setUser] = useState(getUser());
+  const [users, setUsers] = useState();
   const [favoriteUsers, setFavoriteUsers] = useState();
   const [notFavoriteUsers, setNotFavoriteUsers] = useState();
 
@@ -74,6 +75,8 @@ const AuthContext = ({ children }) => {
           setFavoriteUsers,
           notFavoriteUsers,
           setNotFavoriteUsers,
+          users,
+          setUsers,
         }}
       >
         {children}

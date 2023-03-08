@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const ShowUsers = ({ users, str, fn }) => {
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
   if (!users) return;
+
 
   return (
     <>
@@ -16,7 +17,6 @@ const ShowUsers = ({ users, str, fn }) => {
             onClick={async () => {
               const result = await fn(element._id, user.email);
 
-           
               return result;
             }}
           ></i>

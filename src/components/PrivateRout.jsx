@@ -13,4 +13,3 @@ const PrivateRout = ({ children }) => {
 };
 
 export default PrivateRout;
-// || !user.favorites.length

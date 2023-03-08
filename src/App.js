@@ -4,11 +4,13 @@ import '../src/styles/sign-in.scss';
 import '../src/styles/sign-up.scss';
 import '../src/styles/your-profile.scss';
 import '../src/styles/main-room.scss';
+import '../src/styles/footer.scss';
 import { useEffect } from 'react';
 import socketIO from 'socket.io-client';
 import { Route, Routes } from 'react-router-dom';
 import PrivateRout from './components/PrivateRout';
 import Home from './components/Home';
+import Footer from './components/Footer';
 import NavBar from './components/NavBar';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
@@ -19,11 +21,9 @@ import DeleteProfile from './components/DeleteProfile';
 import ChatPage from './components/ChatPage';
 import ShowUsers from './components/ShowUsers';
 import { useAuth } from './hooks/useAuth';
-const socket = socketIO.connect('http://localhost:3000');
+const socket = socketIO.connect('http://localhost:3001');
 function App() {
-  const { favoriteUsers, removeFromFavoritesById } =
-    useAuth();
-  
+  const { favoriteUsers, removeFromFavoritesById } = useAuth();
 
   return (
     <>
@@ -78,7 +78,9 @@ function App() {
       </div>
       <div className="space"></div>
 
-      <div>FOOTER</div>
+      <div>
+        <Footer />
+      </div>
     </>
   );
 }
