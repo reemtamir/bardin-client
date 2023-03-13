@@ -3,16 +3,15 @@ import { useAuth } from '../hooks/useAuth';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 const ChatBody = ({ messages, lastMessageRef, typingStatus }) => {
-  const { myProfile, user } = useAuth();
+  const { activeUser, user } = useAuth();
 
-  const [onlineUser, setOnlineUser] = useState();
-  useEffect(() => {
-    const getUser = async function () {
-      const { data } = await myProfile(user._id);
-      setOnlineUser(data);
-    };
-    getUser();
-  }, [user]);
+  // useEffect(() => {
+  //   const getUser = async function () {
+  //     const { data } = await myProfile(user._id);
+  //     setmyProfile(data);
+  //   };
+  //   getUser();
+  // }, [user]);
 
   // const handleLeaveChat = () => {
   //   localStorage.removeItem('user');
@@ -30,7 +29,7 @@ const ChatBody = ({ messages, lastMessageRef, typingStatus }) => {
 
       <div className="message__container">
         {messages.map((message, index) =>
-          message.name === onlineUser.name ? (
+          message.name === activeUser.name ? (
             <div key={index} className="message__chats">
               <p className="sender__name">You</p>
               <div className="message__sender">

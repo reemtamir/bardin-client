@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const NavBar = () => {
-  const { user } = useAuth();
+  const { user, activeUser, favoriteUsers, setIsAdmin } = useAuth();
 
   return (
     <>
@@ -33,6 +33,22 @@ const NavBar = () => {
                   Home
                 </Link>
               </li>
+              {!user && (
+                <li
+                  onClick={() => {
+                    setIsAdmin((admin) => !admin);
+                  }}
+                  className="nav-item ms-2"
+                >
+                  <Link
+                    to={'/admin-page'}
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Admin
+                  </Link>
+                </li>
+              )}
               {user && (
                 <li className="nav-item ">
                   <Link
@@ -44,7 +60,7 @@ const NavBar = () => {
                   </Link>
                 </li>
               )}
-              {user?.favorites.length ? (
+              {favoriteUsers.length ? (
                 <li className="nav-item ">
                   <Link
                     to={`/favorites`}

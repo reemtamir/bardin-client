@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Input from './Input';
 import { useAuth } from '../hooks/useAuth';
 import joi from 'joi';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
+import AdminNavBar from './AdminNavBar';
 
-const SignIn = () => {
-  const { user, logIn } = useAuth();
+const SignInAdmin = () => {
+  const { admin, setAdmin, logInAdmin } = useAuth();
 
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -19,8 +20,11 @@ const SignIn = () => {
     },
     async onSubmit(values) {
       try {
-        const user = await logIn(values);
-
+        console.log(values);
+        const { data } = await logInAdmin(values);
+        setAdmin(data);
+        console.log(data);
+        navigate('/admin-page');
         // socket.emit('newUser', { userName: user.email, socketID: socket.id });
         // console.log('socket', socket);
       } catch (error) {
@@ -39,13 +43,14 @@ const SignIn = () => {
   });
 
   useEffect(() => {
-    if (!user) return;
+    if (!admin) return;
 
-    navigate(`/chat-room/${user._id}`);
-  }, [user, navigate]);
+    navigate('/admin-page');
+  }, [admin, navigate]);
 
   return (
     <>
+      <AdminNavBar />
       {/* {error && <div>{error}</div>} */}
       <form noValidate onSubmit={form.handleSubmit}>
         <div className=" container ">
@@ -80,19 +85,9 @@ const SignIn = () => {
             Sign in
           </button>
         </div>
-        <div className="container">
-          <h2 className="header">Don't have an account? </h2>
-          <button type="submit" className="sign-up-btn">
-            {' '}
-            <Link to="/sign-up" className="link-to-sign-up">
-              {' '}
-              sign up{' '}
-            </Link>
-          </button>
-        </div>
       </form>
     </>
   );
 };
 
-export default SignIn;
+export default SignInAdmin;

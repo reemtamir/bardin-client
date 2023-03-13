@@ -5,7 +5,7 @@ import '../src/styles/sign-up.scss';
 import '../src/styles/your-profile.scss';
 import '../src/styles/main-room.scss';
 import '../src/styles/footer.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import socketIO from 'socket.io-client';
 import { Route, Routes } from 'react-router-dom';
 import PrivateRout from './components/PrivateRout';
@@ -20,22 +20,38 @@ import LogOut from './components/LogOut';
 import DeleteProfile from './components/DeleteProfile';
 import ChatPage from './components/ChatPage';
 import ShowUsers from './components/ShowUsers';
+import SignUpAdmin from './components/SignUpAdmin';
+import SignInAdmin from './components/SignInAdmin';
 import { useAuth } from './hooks/useAuth';
+import AdminPrivateRout from './components/AdminPrivateRout';
+import AdminPage from './components/AdminPage';
+import AdminEditPage from './components/AdminEditPage';
 const socket = socketIO.connect('http://localhost:3001');
 function App() {
-  const { favoriteUsers, removeFromFavoritesById } = useAuth();
+  const { favoriteUsers, removeFromFavoritesById, isAdmin } = useAuth();
 
   return (
     <>
-      <header>
-        <NavBar />
-      </header>
+      <header>{!isAdmin && <NavBar />}</header>
       <div className="app">
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="sign-up" element={<SignUp />}></Route>
+          <Route path="sign-up-admin" element={<SignUpAdmin />}></Route>
           <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
           <Route path="log-out" element={<LogOut socket={socket} />}></Route>
+
+          <Route path="sign-in-admin" element={<SignInAdmin />}></Route>
+
+          <Route path="admin-page" element={<AdminPage />}></Route>
+          <Route
+            path="/edit-users/:id"
+            element={
+              <AdminPrivateRout>
+                <AdminEditPage />
+              </AdminPrivateRout>
+            }
+          ></Route>
           <Route
             path="chat-room/:id"
             element={

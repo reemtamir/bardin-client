@@ -1,10 +1,11 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { Link } from 'react-router-dom';
-const UserProfileDisplay = ({ activeUser }) => {
-  const { user } = useAuth();
+const UserProfileDisplay = () => {
+  const { user, activeUser } = useAuth();
 
-  if (!user || !activeUser) return;
+  if (!user) return;
+
   return (
     <>
       <div className="user-container ">

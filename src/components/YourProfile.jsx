@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useFormik } from 'formik';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
@@ -8,25 +8,17 @@ import joi from 'joi';
 
 import { Link } from 'react-router-dom';
 const YourProfile = () => {
-  const { myProfile, user, updateUser } = useAuth();
-  const [userCard, setUserCard] = useState('');
+  const { activeUser, user, updateUser } = useAuth();
   const navigate = useNavigate();
-  useEffect(() => {
-    const getMyProfile = async () => {
-      const { data } = await myProfile(user._id);
-      setUserCard(data);
-    };
-    getMyProfile();
-  }, [myProfile]);
 
   useEffect(() => {
-    if (!userCard) return;
-    console.log(userCard);
-    const { age, _id, vip, createdAt, __v, favorites, ...rest } = userCard;
+    if (!activeUser) return;
+
+    const { age, _id, vip, createdAt, __v, favorites, ...rest } = activeUser;
     form.setValues({
       ...rest,
     });
-  }, [userCard]);
+  }, [activeUser]);
 
   const form = useFormik({
     validateOnMount: true,

@@ -6,17 +6,17 @@ import { useParams } from 'react-router-dom';
 
 const ChatFooter = ({ socket }) => {
   const { id } = useParams();
-  const { myProfile, user } = useAuth();
+  const { activeUser, user } = useAuth();
   const [message, setMessage] = useState('');
   const [onlineUser, setOnlineUser] = useState();
-  useEffect(() => {
-    const getUser = async function () {
-      const { data } = await myProfile(id);
-      setOnlineUser(data);
-      socket.emit('newUser', data);
-    };
-    getUser();
-  }, [user]);
+  // useEffect(() => {
+  //   const getUser = async function () {
+  //     const { data } = await myProfile(id);
+  //     setOnlineUser(data);
+  //     socket.emit('newUser', data);
+  //   };
+  //   getUser();
+  // }, [user]);
   const handleTyping = () => {
     socket.emit('typing', `${onlineUser.name} is typing`);
   };
