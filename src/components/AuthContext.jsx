@@ -93,6 +93,7 @@ const AuthContext = ({ children }) => {
     localStorage.removeItem('token');
     if (user) refreshUser();
     if (admin) refreshAdmin();
+    setFavoriteUsers([]);
   }
 
   return (
