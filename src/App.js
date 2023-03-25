@@ -6,6 +6,7 @@ import '../src/styles/your-profile.scss';
 import '../src/styles/main-room.scss';
 import '../src/styles/footer.scss';
 import '../src/styles/vip-req-list.scss';
+import '../src/styles/admin-page.scss';
 
 import socketIO from 'socket.io-client';
 import { Route, Routes } from 'react-router-dom';

@@ -72,7 +72,11 @@ const VipReq = () => {
       <form noValidate onSubmit={form.handleSubmit}>
         {error && <div className="alert alert-danger">{error}</div>}
 
-        <Link onClick={() => setIsInMainPage(true)} to={'/admin-page'}>
+        <Link
+          className="my-card-link fs-3 "
+          onClick={() => setIsInMainPage(true)}
+          to={`/chat-room/${activeUser._id}`}
+        >
           Go back
         </Link>
 

@@ -21,17 +21,25 @@ const AdminPage = () => {
       <AdminNavBar />
 
       {admin && (
-        <div>
-          <p>hello admin</p>
+        <div className="admin-page-container">
+          <p className='admin-page-p'>
+            Hello, <span>{admin.email}</span>
+          </p>
           <Link
+            className="my-card-link fs-3 text-danger"
             onClick={() => setIsInMainPage(false)}
             to={`/edit-users/${admin._id}`}
           >
-            click to see and edit users
+            Click to see and edit users
           </Link>
           <div>
             {' '}
-            <Link to={`/vip-req-list`}>req</Link>
+            <Link
+              className="my-card-link fs-3 text-danger"
+              to={`/vip-req-list`}
+            >
+              Click to see Vip req
+            </Link>
           </div>
         </div>
       )}

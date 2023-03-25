@@ -20,7 +20,11 @@ const AdminEditPage = () => {
   return (
     <>
       <AdminNavBar />
-      <Link onClick={() => setIsInMainPage(true)} to={'/admin-page'}>
+      <Link
+        className="my-card-link fs-3 "
+        onClick={() => setIsInMainPage(true)}
+        to={'/admin-page'}
+      >
         Go back
       </Link>
       <div style={{ gap: '2rem' }} className="users w-75 ">

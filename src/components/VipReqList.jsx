@@ -16,9 +16,17 @@ const VipReqList = () => {
 
   return (
     <>
-      <Link onClick={() => setIsInMainPage(true)} to={'/admin-page'}>
+      <Link
+        className="my-card-link fs-3"
+        onClick={() => setIsInMainPage(true)}
+        to={'/admin-page'}
+      >
         Go back
       </Link>
+
+      {!vipReq.length && (
+        <div className="text-info fs-3 m-auto">No vip req</div>
+      )}
       <div className="vip-req-container">
         {vipReq.map((req) => {
           return (
