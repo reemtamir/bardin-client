@@ -25,7 +25,7 @@ const Input = ({
           value={value}
         />
 
-        <span>{error}</span>
+        <p className="error">{error}</p>
       </div>
     </>
   );
