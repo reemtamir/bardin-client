@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const UserProfileDisplay = () => {
   const { user, activeUser } = useAuth();
 
-  if (!user) return;
+  if (!user || !activeUser) return;
 
   return (
     <>
@@ -18,7 +18,7 @@ const UserProfileDisplay = () => {
             <li className="text-light">{activeUser.name}</li>
           </ul>
         </div>
-        <Link className="link" to={`/me/${user._id}`}>
+        <Link className="my-card-link" to={`/me/${user._id}`}>
           Edit your profile
         </Link>
       </div>

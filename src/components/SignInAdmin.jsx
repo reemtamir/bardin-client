@@ -8,9 +8,10 @@ import { useFormik } from 'formik';
 import AdminNavBar from './AdminNavBar';
 
 const SignInAdmin = () => {
-  const { admin, setAdmin, logInAdmin } = useAuth();
-
-  const [error, setError] = useState('');
+  const { admin, setAdmin, logInAdmin, error, setError } = useAuth();
+  useEffect(() => {
+    setError('');
+  }, []);
   const navigate = useNavigate();
   const form = useFormik({
     validateOnMount: true,
@@ -20,15 +21,16 @@ const SignInAdmin = () => {
     },
     async onSubmit(values) {
       try {
-        console.log(values);
         const { data } = await logInAdmin(values);
-        setAdmin(data);
+        await setAdmin(data);
+
         console.log(data);
         navigate('/admin-page');
         // socket.emit('newUser', { userName: user.email, socketID: socket.id });
         // console.log('socket', socket);
-      } catch (error) {
-        setError(error);
+      } catch ({ response }) {
+        console.log(response.data);
+        setError(response.data);
       }
     },
     validate: formikValidateUsingJoi({
@@ -51,7 +53,7 @@ const SignInAdmin = () => {
   return (
     <>
       <AdminNavBar />
-      {/* {error && <div>{error}</div>} */}
+      {error && <div className="alert alert-danger">{error}</div>}
       <form noValidate onSubmit={form.handleSubmit}>
         <div className=" container ">
           <div className=" input-div ">

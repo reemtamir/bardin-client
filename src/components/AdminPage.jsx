@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 import AdminNavBar from './AdminNavBar';
 
 const AdminPage = () => {
-  const { admin, getUsers } = useAuth();
+  const { admin, getUsers, setIsInMainPage } = useAuth();
   const [users, setUsers] = useState([]);
-  console.log('admin', admin);
+
   useEffect(() => {
     const getAllUsers = async () => {
       const allUsers = await getUsers();
@@ -23,9 +23,16 @@ const AdminPage = () => {
       {admin && (
         <div>
           <p>hello admin</p>
-          <Link to={`/edit-users/${admin._id}`}>
+          <Link
+            onClick={() => setIsInMainPage(false)}
+            to={`/edit-users/${admin._id}`}
+          >
             click to see and edit users
           </Link>
+          <div>
+            {' '}
+            <Link to={`/vip-req-list`}>req</Link>
+          </div>
         </div>
       )}
     </>

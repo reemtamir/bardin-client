@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import joi from 'joi';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
-
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import Input from './Input';
 import Joi from 'joi';
+import { toast } from 'react-toastify';
 const SignUp = () => {
   const { signUp, error, setError } = useAuth();
-
+  useEffect(() => {
+    setError('');
+  }, []);
   const navigate = useNavigate();
   const form = useFormik({
     validateOnMount: true,
@@ -31,11 +33,12 @@ const SignUp = () => {
           image = userImage;
         }
 
-        await signUp({ ...rest, image });
+        const { data } = await signUp({ ...rest, image });
 
+        toast(` ${data.email} has just created 🙂`);
         navigate('/sign-in');
-      } catch ({ error }) {
-        setError(error);
+      } catch ({ response }) {
+        setError(response.data);
       }
     },
     validate: formikValidateUsingJoi({
@@ -62,7 +65,7 @@ const SignUp = () => {
   return (
     <>
       <form noValidate onSubmit={form.handleSubmit}>
-        {error && <div className="alert alert-danger">{error}wwwwww</div>}
+        {error && <div className="alert alert-danger">{error}</div>}
         <div className="container">
           {' '}
           <Input
@@ -185,7 +188,7 @@ const SignUp = () => {
         </div>
         <div className="container">
           <button type="submit" className="sign-up-btn">
-            Sing Up
+            Sign Up
           </button>
         </div>
       </form>

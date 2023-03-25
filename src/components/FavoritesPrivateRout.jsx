@@ -3,9 +3,9 @@ import { useAuth } from '../hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 
 const FavoritesPrivateRout = ({ children }) => {
-  const { user } = useAuth();
+  const { favoriteUsers } = useAuth();
 
-  if (!user.favorites.length) {
+  if (!favoriteUsers.length) {
     return <Navigate to="/" />;
   }
 

@@ -5,11 +5,10 @@ import { useAuth } from '../hooks/useAuth';
 import joi from 'joi';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
-
+import { toast } from 'react-toastify';
 const SignIn = () => {
-  const { user, logIn } = useAuth();
+  const { user, logIn, setError, error } = useAuth();
 
-  const [error, setError] = useState('');
   const navigate = useNavigate();
   const form = useFormik({
     validateOnMount: true,
@@ -19,7 +18,7 @@ const SignIn = () => {
     },
     async onSubmit(values) {
       try {
-        const user = await logIn(values);
+        await logIn(values);
 
         // socket.emit('newUser', { userName: user.email, socketID: socket.id });
         // console.log('socket', socket);
@@ -43,10 +42,12 @@ const SignIn = () => {
 
     navigate(`/chat-room/${user._id}`);
   }, [user, navigate]);
-
+  useEffect(() => {
+    setError('');
+  }, []);
   return (
     <>
-      {/* {error && <div>{error}</div>} */}
+      {error && <div className="alert alert-danger">{error}</div>}
       <form noValidate onSubmit={form.handleSubmit}>
         <div className=" container ">
           <div className=" input-div ">

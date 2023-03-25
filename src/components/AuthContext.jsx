@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { createContext, useState } from 'react';
+import { toast } from 'react-toastify';
 import {
   getUser,
   signIn,
@@ -11,20 +12,40 @@ import {
   removeFromFavorites,
   signUpAdmin,
   signInAdmin,
+  updateVip,
   getFavorites,
   getNotFavorites,
+  createVipReq,
+  getVipReq,
+  deleteVipReq,
+  setTokenHeader,
+
 } from '../utils/axios';
+
 export const context = createContext(null);
 const AuthContext = ({ children }) => {
   const [user, setUser] = useState(getUser());
   const [activeUser, setActiveUser] = useState(null);
-  const [admin, setAdmin] = useState(getUser());
+  const [admin, setAdmin] = useState(null);
   const [users, setUsers] = useState();
   const [favoriteUsers, setFavoriteUsers] = useState([]);
   const [notFavoriteUsers, setNotFavoriteUsers] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(admin);
+  const [isInMainPage, setIsInMainPage] = useState(true);
   const [error, setError] = useState('');
+  const [vipUsers, setVipUsers] = useState([]);
+  const [vipReq, setVipReq] = useState([]);
 
+  useEffect(() => {
+    const getVips = async () => {
+      const { data } = await getVipReq();
+      setVipReq(data);
+    };
+    getVips();
+  }, [vipUsers]);
+  useEffect(() => {
+    setIsAdmin(admin);
+  }, [admin]);
   useEffect(() => {
     if (!user) return;
     const getAllFavorites = async (user) => {
@@ -36,9 +57,15 @@ const AuthContext = ({ children }) => {
 
   useEffect(() => {
     if (!user) return;
+
     const getAllNotFavorites = async (id) => {
-      const data = await getNotFavorites(id);
-      setNotFavoriteUsers(data);
+      try {
+        const data = await getNotFavorites(id);
+
+        setNotFavoriteUsers(data);
+      } catch (error) {
+        return;
+      }
     };
     getAllNotFavorites(user._id);
   }, [user]);
@@ -54,19 +81,44 @@ const AuthContext = ({ children }) => {
   function refreshUser() {
     setUser(getUser());
   }
+
   function refreshAdmin() {
     setAdmin(getUser());
   }
-  async function logIn(values) {
-    const user = await signIn(values);
+  useEffect(() => {
     refreshUser();
+  }, []);
 
-    return user;
+  // async function createUser(user) {
+  //   await signUp(user);
+  //   refreshUser();
+  // }
+  async function logIn(values, user) {
+    try {
+      const { data } = await signIn(values);
+      if (!data) return;
+      localStorage.setItem('token', data);
+      setTokenHeader();
+      setUser(getUser());
+
+      toast(`welcome ${getUser().email}!`);
+      return user;
+    } catch ({ response }) {
+      setError(response.data);
+    }
   }
+
   async function logInAdmin(values) {
-    const { data } = await signInAdmin(values);
-    console.log(data);
-    refreshAdmin();
+    try {
+      const { data } = await signInAdmin(values);
+      localStorage.setItem('token', data);
+      refreshAdmin();
+      setTokenHeader();
+      toast(`welcome ${getUser().email}!`);
+      return admin;
+    } catch ({ response }) {
+      setError(response.data);
+    }
 
     return admin;
   }
@@ -93,7 +145,10 @@ const AuthContext = ({ children }) => {
     localStorage.removeItem('token');
     if (user) refreshUser();
     if (admin) refreshAdmin();
+    setIsAdmin(false);
     setFavoriteUsers([]);
+    setActiveUser(null);
+    setError('');
   }
 
   return (
@@ -122,9 +177,16 @@ const AuthContext = ({ children }) => {
           isAdmin,
           setIsAdmin,
           setFavoriteUsers,
-
-          // getFavorites,
-          // getNotFavorites,
+          updateVip,
+          vipUsers,
+          setVipUsers,
+          isInMainPage,
+          setIsInMainPage,
+          createVipReq,
+          vipReq,
+          deleteVipReq,
+          setVipReq,
+          setActiveUser,
         }}
       >
         {children}

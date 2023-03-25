@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
@@ -6,6 +6,7 @@ import Input from './Input';
 import { useFormik } from 'formik';
 import joi from 'joi';
 import AdminNavBar from './AdminNavBar';
+import { toast } from 'react-toastify';
 const SignUpAdmin = () => {
   const { signUpAdmin, error, setError } = useAuth();
 
@@ -21,11 +22,12 @@ const SignUpAdmin = () => {
       try {
         let { confirmedPassword, ...rest } = values;
 
-        await signUpAdmin(rest);
+        const { data } = await signUpAdmin(rest);
 
+        toast(`Admin ${data.email} has created`);
         navigate('/sign-in-admin');
-      } catch ({ error }) {
-        setError(error);
+      } catch ({ response }) {
+        setError(response.data);
       }
     },
     validate: formikValidateUsingJoi({
@@ -45,11 +47,14 @@ const SignUpAdmin = () => {
     }),
   });
 
+  useEffect(() => {
+    setError('');
+  }, []);
   return (
     <>
       <AdminNavBar />
       <form noValidate onSubmit={form.handleSubmit}>
-        {error && <div className="alert alert-danger">{error}wwwwww</div>}
+        {error && <div className="alert alert-danger">{error}</div>}
 
         <div className="container">
           <Input
@@ -97,7 +102,7 @@ const SignUpAdmin = () => {
 
         <div className="container">
           <button type="submit" className="sign-up-btn">
-            Sing Up
+            Sign Up
           </button>
         </div>
       </form>

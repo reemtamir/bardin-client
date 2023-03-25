@@ -15,7 +15,7 @@ const ShowUsers = ({ users, str, fn }) => {
             id={element._id}
             onClick={async () => {
               const data = await fn(user.email, element._id);
-              console.log('data', data);
+
               return data;
             }}
           ></i>

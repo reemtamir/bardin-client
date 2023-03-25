@@ -1,27 +1,18 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { toast } from 'react-toastify';
 axios.defaults.baseURL = 'http://localhost:3000';
+import(toast);
 setTokenHeader();
 
 ///USER
 export const signUp = async (values) => {
-  try {
-    await axios.post('/users', {
-      ...values,
-    });
-  } catch ({ response }) {
-    return response.data.error;
-  }
+  return await axios.post('/users', {
+    ...values,
+  });
 };
 export const signIn = async (values) => {
-  try {
-    const { data } = await axios.post(`/auth`, values);
-    localStorage.setItem('token', data);
-    setTokenHeader();
-    return data;
-  } catch ({ response }) {
-    console.log('error', response.data);
-  }
+  return await axios.post(`/auth`, values);
 };
 export const getUsers = async () => {
   const { data } = await axios.get('/users');
@@ -33,6 +24,7 @@ export const getFavorites = async (id) => {
 };
 export const getNotFavorites = async (id) => {
   const { data } = await axios.get(`/users/get-not-favorites/${id}`);
+  if (!data) return;
   return data;
 };
 export async function addToFavorites(id, email) {
@@ -54,33 +46,46 @@ export const myProfile = async (id) => {
 export function getUser() {
   try {
     return jwtDecode(getJwt());
-  } catch {
+  } catch (response) {
     return null;
   }
 }
 
+export const createVipReq = async (details) => {
+  return axios.post('/users/vip', details);
+};
+
 ////ADMIN
 export const signUpAdmin = async (values) => {
-  try {
-    await axios.post('/admin', {
-      ...values,
-    });
-  } catch ({ response }) {
-    return response.data.error;
-  }
+  return await axios.post('/admin', {
+    ...values,
+  });
 };
 
 export const signInAdmin = async (values) => {
-  try {
-    const { data } = await axios.post(`/admin/sign-in`, values);
-    localStorage.setItem('token', data);
-    setTokenHeader();
-    return data;
-  } catch ({ response }) {
-    console.log('error', response.data);
-  }
+  return await axios.post(`/admin/sign-in`, values);
 };
 
+export const getVipReq = async () => {
+  return await axios.get('/admin/vip-req');
+};
+
+export const updateVip = async (id, email, isVip) => {
+  try {
+    return await axios.put(`/admin/change-vip/${id}?email=${email}`, { isVip });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const deleteVipReq = async (id, email) => {
+  try {
+    const { data } = await axios.post(`/admin/delete-vip-req/${id}`, {
+      email,
+    });
+  } catch ({ response }) {
+    console.log('response.data', response.data);
+  }
+};
 export function getJwt() {
   return localStorage.getItem('token');
 }

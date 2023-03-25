@@ -5,7 +5,8 @@ import '../src/styles/sign-up.scss';
 import '../src/styles/your-profile.scss';
 import '../src/styles/main-room.scss';
 import '../src/styles/footer.scss';
-import { useEffect, useState } from 'react';
+import '../src/styles/vip-req-list.scss';
+
 import socketIO from 'socket.io-client';
 import { Route, Routes } from 'react-router-dom';
 import PrivateRout from './components/PrivateRout';
@@ -26,13 +27,31 @@ import { useAuth } from './hooks/useAuth';
 import AdminPrivateRout from './components/AdminPrivateRout';
 import AdminPage from './components/AdminPage';
 import AdminEditPage from './components/AdminEditPage';
+import ThankYou from './components/ThankYou';
+import VipReqList from './components/VipReqList';
+import VipReqForm from './components/VipReqForm';
+import AdminNavBar from './components/AdminNavBar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const socket = socketIO.connect('http://localhost:3001');
 function App() {
-  const { favoriteUsers, removeFromFavoritesById, isAdmin } = useAuth();
+  const { favoriteUsers, removeFromFavoritesById, isAdmin, user } = useAuth();
 
   return (
     <>
       <header>{!isAdmin && <NavBar />}</header>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="app">
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -44,6 +63,17 @@ function App() {
           <Route path="sign-in-admin" element={<SignInAdmin />}></Route>
 
           <Route path="admin-page" element={<AdminPage />}></Route>
+
+          <Route
+            path="/vip-req-list"
+            element={
+              <AdminPrivateRout>
+                <AdminNavBar />
+                <VipReqList />
+              </AdminPrivateRout>
+            }
+          ></Route>
+
           <Route
             path="/edit-users/:id"
             element={
@@ -88,6 +118,24 @@ function App() {
                   />
                 </div>
               </FavoritesPrivateRout>
+            }
+          ></Route>
+
+          <Route
+            path="vip-req-form"
+            element={
+              <PrivateRout>
+                <VipReqForm />
+              </PrivateRout>
+            }
+          ></Route>
+
+          <Route
+            path="thank-you"
+            element={
+              <PrivateRout>
+                <ThankYou />
+              </PrivateRout>
             }
           ></Route>
         </Routes>

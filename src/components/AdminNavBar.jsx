@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 const AdminNavBar = () => {
-  const { admin, setIsAdmin } = useAuth();
-  console.log('admin nav', admin);
+  const { admin, setIsAdmin, isInMainPage } = useAuth();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-light w-80">
@@ -27,16 +27,22 @@ const AdminNavBar = () => {
           </button>
           <div className="collapse navbar-collapse " id="navbarNavDropdown">
             <ul className="navbar-nav me-auto  ">
-              <li
-                onClick={() => {
-                  setIsAdmin((admin) => !admin);
-                }}
-                className="nav-item ms-2"
-              >
-                <Link to={'/'} className="nav-link active" aria-current="page">
-                  Home
-                </Link>
-              </li>
+              {isInMainPage && (
+                <li
+                  onClick={() => {
+                    setIsAdmin(false);
+                  }}
+                  className="nav-item ms-2"
+                >
+                  <Link
+                    to={'/'}
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Home
+                  </Link>
+                </li>
+              )}
             </ul>
             <ul className="navbar-nav ms-auto ">
               {!admin && (

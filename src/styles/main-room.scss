@@ -46,6 +46,51 @@ li {
   gap: 1em;
   flex-wrap: wrap;
   margin: auto;
+  & > .vip-alert-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    background-color: rgb(48, 48, 68);
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    & > .vip-alert-message {
+      background: linear-gradient(
+        to right,
+        #ff0000 0%,
+        #ff7f00 25%,
+        #0000ff 50%,
+        #00ff00 75%
+      );
+      color: white;
+      font-size: 2rem;
+    }
+    & > .vip-alert-btns-div {
+      width: 50%;
+      display: flex;
+      align-self: center;
+      justify-content: space-around;
+      & > .vip-alert-btn-return,
+      .vip-alert-btn-get-vip {
+        background-color: red;
+        width: 40%;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: 0.5s;
+        &:hover {
+          background-color: rgb(231, 60, 60);
+        }
+      }
+      & .vip-alert-btn-get-vip {
+        background-color: greenyellow;
+        &:hover {
+          background-color: rgb(162, 218, 78);
+        }
+      }
+    }
+  }
 }
 .min-height {
   min-height: 40%;

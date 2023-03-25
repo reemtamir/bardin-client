@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const NavBar = () => {
-  const { user, activeUser, favoriteUsers, setIsAdmin } = useAuth();
+  const { user, favoriteUsers, setIsAdmin } = useAuth();
 
   return (
     <>
@@ -36,7 +36,7 @@ const NavBar = () => {
               {!user && (
                 <li
                   onClick={() => {
-                    setIsAdmin((admin) => !admin);
+                    setIsAdmin(true);
                   }}
                   className="nav-item ms-2"
                 >
@@ -50,16 +50,19 @@ const NavBar = () => {
                 </li>
               )}
               {user && (
-                <li className="nav-item ">
-                  <Link
-                    to={`/chat-room/${user._id}`}
-                    className="nav-link active"
-                    aria-current="page"
-                  >
-                    Main room
-                  </Link>
-                </li>
+                <>
+                  <li className="nav-item ">
+                    <Link
+                      to={`/chat-room/${user._id}`}
+                      className="nav-link active"
+                      aria-current="page"
+                    >
+                      Main room
+                    </Link>
+                  </li>
+                </>
               )}
+
               {favoriteUsers.length ? (
                 <li className="nav-item ">
                   <Link
@@ -71,6 +74,18 @@ const NavBar = () => {
                   </Link>
                 </li>
               ) : null}
+              {!user ||
+                (!user?.vip && (
+                  <li className="nav-item ">
+                    <Link
+                      to={`/vip-req-form`}
+                      className="nav-link active"
+                      aria-current="page"
+                    >
+                      vip
+                    </Link>
+                  </li>
+                ))}
             </ul>
             <ul className="navbar-nav ms-auto ">
               {!user && (

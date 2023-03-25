@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useFormik } from 'formik';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import Input from './Input';
 import joi from 'joi';
-
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 const YourProfile = () => {
-  const { activeUser, user, updateUser } = useAuth();
+  const { activeUser, user, updateUser, setActiveUser } = useAuth();
   const navigate = useNavigate();
-
+  const [isDelete, setIsDelete] = useState(false);
   useEffect(() => {
     if (!activeUser) return;
-
+    setActiveUser(activeUser);
     const { age, _id, vip, createdAt, __v, favorites, ...rest } = activeUser;
     form.setValues({
       ...rest,
@@ -54,8 +54,11 @@ const YourProfile = () => {
         image = userImage;
       }
       try {
-        await updateUser(user._id, { ...body, image });
+        const { data } = await updateUser(user._id, { ...body, image });
 
+        setActiveUser(data);
+
+        toast(`${activeUser.email}'s profile has been updated`);
         navigate(`/chat-room/${user._id}`);
       } catch ({ response }) {
         console.log(response.data);
@@ -161,18 +164,6 @@ const YourProfile = () => {
           </div>
         </div>
 
-        {/* <div className="container">
-          <Input
-            {...form.getFieldProps('age')}
-            label={'Date of birth'}
-            type="date"
-            id="age"
-            labelClass={'label'}
-            inputClass={'input w-25 fs-4'}
-            error={form.touched.age && form.errors.age}
-          />
-        </div> */}
-
         <div className="container">
           <Input
             {...form.getFieldProps('image')}
@@ -188,9 +179,29 @@ const YourProfile = () => {
           </button>
         </div>
       </form>
-      <Link className="link text-danger fs-3 m-auto" to={`/delete/${user._id}`}>
-        <i className="bi bi-trash3-fill "></i> Delete your account
-      </Link>
+      <div
+        style={{ cursor: 'pointer' }}
+        className="link text-danger fs-3 m-auto"
+        onClick={() => setIsDelete(true)}
+      >
+        Delete your account
+      </div>
+      {isDelete && (
+        <div className="delete-alert-box">
+          <p className="delete-alert-box-p">Are you sure?</p>
+          <div className="delete-alert-link-container">
+            <Link className="delete-alert-link-delete" to={`/delete/${user._id}`}>
+              <i className="bi bi-trash3-fill "></i> Delete your account
+            </Link>
+            <Link
+              className="delete-alert-link-back"
+              to={`/chat-room/${user._id}`}
+            >
+              <i className="bi bi-arrow-return-right "></i> Go back
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   );
 };

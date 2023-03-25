@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import AdminNavBar from './AdminNavBar';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const AdminEditPage = () => {
-  const { getUsers } = useAuth();
+  const { getUsers, updateVip, vipUsers, setVipUsers, setIsInMainPage } =
+    useAuth();
+
   const [users, setUsers] = useState([]);
+  const { id } = useParams();
   useEffect(() => {
     const getAllUsers = async () => {
       const allUsers = await getUsers();
       setUsers(allUsers);
     };
     getAllUsers();
-  }, []);
+  }, [vipUsers]);
 
   return (
     <>
       <AdminNavBar />
-      <Link to={'/admin-page'}>Go back</Link>
+      <Link onClick={() => setIsInMainPage(true)} to={'/admin-page'}>
+        Go back
+      </Link>
       <div style={{ gap: '2rem' }} className="users w-75 ">
         {users.map((element, index) => {
           return (
@@ -26,15 +32,28 @@ const AdminEditPage = () => {
               className="users-container "
             >
               <li
-                value={element.email}
-                onClick={({ target: { __reactProps$5yb4waj1bx } }) => {}}
+                id={element.email}
+                onClick={async ({ target }) => {
+                  try {
+                    await updateVip(id, target.id, element.vip ? false : true);
+                    setVipUsers((vipUsers) => !vipUsers);
+                    toast(
+                      `${
+                        target.id
+                      }'s VIP status has updated too ${!element.vip}`
+                    );
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
               >
                 VIP-{element.vip.toString()}
               </li>
+              {/* vip true <input type="checkbox" name="true" id="true" />
+              vip false <input type="checkbox" name="false" id="false" /> */}
               <div className="min-height">
                 <img src={element.image} alt={`${element.name} `} />
               </div>
-
               <div className="card-body ">
                 <ul className="ul ">
                   <li className="fs-6">{element.name}</li>
