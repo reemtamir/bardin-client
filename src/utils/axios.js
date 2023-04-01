@@ -1,8 +1,8 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import { toast } from 'react-toastify';
+
 axios.defaults.baseURL = 'http://localhost:3000';
-import(toast);
+
 setTokenHeader();
 
 ///USER

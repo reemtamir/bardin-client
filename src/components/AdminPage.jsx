@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 import AdminNavBar from './AdminNavBar';
@@ -22,8 +22,8 @@ const AdminPage = () => {
 
       {admin && (
         <div className="admin-page-container">
-          <p className='admin-page-p'>
-            Hello, <span>{admin.email}</span>
+          <p className="admin-page-p">
+            Hello, <span>{admin.name}</span>
           </p>
           <Link
             className="my-card-link fs-3 text-danger"

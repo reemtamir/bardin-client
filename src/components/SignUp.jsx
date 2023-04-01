@@ -35,21 +35,35 @@ const SignUp = () => {
 
         const { data } = await signUp({ ...rest, image });
 
-        toast(` ${data.email} has just created 🙂`);
+        toast(` ${data.name} has just created 🙂`);
         navigate('/sign-in');
       } catch ({ response }) {
         setError(response.data);
       }
     },
     validate: formikValidateUsingJoi({
-      name: joi.string().min(3).max(255).required(),
+      name: joi
+        .string()
+        .min(3)
+        .max(255)
+        .regex(
+          /^[\u0590-\u05fe\u0621-\u064aA-Za-z]+(([',. -][\u0590-\u05fe\u0621-\u064aA-Za-z ])?[\u0590-\u05fe\u0621-\u064aA-Za-z]*)*$/
+        )
+
+        .required(),
       email: joi
         .string()
         .min(6)
         .max(255)
         .required()
         .email({ tlds: { allow: false } }),
-      password: joi.string().min(6).max(1024).required().label('password'),
+      password: joi
+        .string()
+        .min(6)
+        .max(1024)
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/)
+        .required()
+        .label('password'),
       confirmedPassword: joi
         .any()
         .equal(joi.ref('password'))
@@ -114,7 +128,7 @@ const SignUp = () => {
             type="password"
             id="confirm-password"
             value={form.confirmedPassword}
-            placeholder="fix rgx password"
+            placeholder="Confirm Password"
             labelClass={'label'}
             inputClass={'input'}
             error={

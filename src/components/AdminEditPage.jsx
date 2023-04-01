@@ -36,6 +36,7 @@ const AdminEditPage = () => {
               className="users-container "
             >
               <li
+                className="vip-status"
                 id={element.email}
                 onClick={async ({ target }) => {
                   try {
@@ -51,7 +52,7 @@ const AdminEditPage = () => {
                   }
                 }}
               >
-                VIP-{element.vip.toString()}
+                VIP- {element.vip.toString()}
               </li>
               {/* vip true <input type="checkbox" name="true" id="true" />
               vip false <input type="checkbox" name="false" id="false" /> */}
@@ -60,8 +61,8 @@ const AdminEditPage = () => {
               </div>
               <div className="card-body ">
                 <ul className="ul ">
-                  <li className="fs-6">{element.name}</li>
-                  <li className="fs-6">{element.email}</li>
+                  <li className="fs-6 mt-1">{element.name}</li>
+                  <li className="fs-6 ">{element.email}</li>
                 </ul>
               </div>
             </div>

@@ -14,6 +14,7 @@ const SignUpAdmin = () => {
   const form = useFormik({
     validateOnMount: true,
     initialValues: {
+      name: '',
       email: '',
       password: '',
       confirmedPassword: '',
@@ -23,21 +24,35 @@ const SignUpAdmin = () => {
         let { confirmedPassword, ...rest } = values;
 
         const { data } = await signUpAdmin(rest);
-
-        toast(`Admin ${data.email} has created`);
+        toast(`Admin ${data.name} has created`);
         navigate('/sign-in-admin');
       } catch ({ response }) {
         setError(response.data);
       }
     },
     validate: formikValidateUsingJoi({
+      name: joi
+        .string()
+        .min(3)
+        .max(255)
+        .regex(
+          /^[\u0590-\u05fe\u0621-\u064aA-Za-z]+(([',. -][\u0590-\u05fe\u0621-\u064aA-Za-z ])?[\u0590-\u05fe\u0621-\u064aA-Za-z]*)*$/
+        )
+
+        .required(),
       email: joi
         .string()
         .min(6)
         .max(255)
         .required()
         .email({ tlds: { allow: false } }),
-      password: joi.string().min(6).max(1024).required().label('password'),
+      password: joi
+        .string()
+        .min(6)
+        .max(1024)
+        .required()
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/)
+        .label('password'),
       confirmedPassword: joi
         .any()
         .equal(joi.ref('password'))
@@ -55,7 +70,19 @@ const SignUpAdmin = () => {
       <AdminNavBar />
       <form noValidate onSubmit={form.handleSubmit}>
         {error && <div className="alert alert-danger">{error}</div>}
-
+        <div className="container">
+          <Input
+            label={'Name'}
+            type="text"
+            id="name"
+            value={form.name}
+            placeholder="Enter name"
+            labelClass={'label'}
+            inputClass={'input'}
+            {...form.getFieldProps('name')}
+            error={form.touched.name && form.errors.name}
+          />
+        </div>
         <div className="container">
           <Input
             label={'Email'}
@@ -91,7 +118,7 @@ const SignUpAdmin = () => {
             type="password"
             id="confirm-password"
             value={form.confirmedPassword}
-            placeholder="fix rgx password"
+            placeholder="Confirm Password"
             labelClass={'label'}
             inputClass={'input'}
             error={

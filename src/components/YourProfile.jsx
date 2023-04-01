@@ -7,8 +7,10 @@ import Input from './Input';
 import joi from 'joi';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+
 const YourProfile = () => {
-  const { activeUser, user, updateUser, setActiveUser } = useAuth();
+  const { activeUser, user, updateUser, setActiveUser, error, setError } =
+    useAuth();
   const navigate = useNavigate();
   const [isDelete, setIsDelete] = useState(false);
   useEffect(() => {
@@ -31,15 +33,29 @@ const YourProfile = () => {
       confirmedPassword: '',
     },
     validate: formikValidateUsingJoi({
-      name: joi.string().min(3).max(255).required(),
+      name: joi
+        .string()
+        .min(3)
+        .max(255)
+        .regex(
+          /^[\u0590-\u05fe\u0621-\u064aA-Za-z]+(([',. -][\u0590-\u05fe\u0621-\u064aA-Za-z ])?[\u0590-\u05fe\u0621-\u064aA-Za-z]*)*$/
+        )
+
+        .required(),
       email: joi
         .string()
         .min(6)
         .max(255)
         .required()
         .email({ tlds: { allow: false } }),
-      password: joi.string().min(6).max(1024).required().label('password'),
-      confirmedPassword: joi.any().required().equal(joi.ref('password')),
+      password: joi
+        .string()
+        .min(6)
+        .max(1024)
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/)
+
+        .label('password'),
+      confirmedPassword: joi.any().equal(joi.ref('password')),
 
       gender: joi.string(),
 
@@ -58,17 +74,20 @@ const YourProfile = () => {
 
         setActiveUser(data);
 
-        toast(`${activeUser.email}'s profile has been updated`);
+        toast(`${activeUser.name}'s profile has been updated`);
         navigate(`/chat-room/${user._id}`);
       } catch ({ response }) {
-        console.log(response.data);
+        setError(response.data);
       }
     },
   });
-
+  useEffect(() => {
+    setError('');
+  }, []);
   return (
     <>
       <form noValidate onSubmit={form.handleSubmit}>
+        {error && <p className="alert alert-danger">{error}</p>}
         <div className="container">
           {' '}
           <Input
@@ -190,7 +209,10 @@ const YourProfile = () => {
         <div className="delete-alert-box">
           <p className="delete-alert-box-p">Are you sure?</p>
           <div className="delete-alert-link-container">
-            <Link className="delete-alert-link-delete" to={`/delete/${user._id}`}>
+            <Link
+              className="delete-alert-link-delete"
+              to={`/delete/${user._id}`}
+            >
               <i className="bi bi-trash3-fill "></i> Delete your account
             </Link>
             <Link

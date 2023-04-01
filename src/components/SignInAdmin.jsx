@@ -40,7 +40,11 @@ const SignInAdmin = () => {
         .max(255)
         .required()
         .email({ tlds: { allow: false } }),
-      password: joi.string().min(6).max(1024).required(),
+      password: joi
+        .string()
+        .min(6)
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/)
+        .required(),
     }),
   });
 

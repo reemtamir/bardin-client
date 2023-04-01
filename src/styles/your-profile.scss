@@ -48,15 +48,15 @@
   }
 }
 .delete-alert-box {
-  width: 90vh;
-  height: 40vh;
+  width: 100vw;
+  height: 100vh;
   background-color: rgb(247, 3, 3);
   display: flex;
   flex-direction: column;
-  position: absolute;
   justify-content: space-around;
+  position: absolute;
   top: 30vh;
-  left: 50vh;
+
   & > .delete-alert-box-p {
     font-size: 4rem;
     color: rgb(10, 8, 8);

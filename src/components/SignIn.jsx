@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import joi from 'joi';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
-import { toast } from 'react-toastify';
+
 const SignIn = () => {
   const { user, logIn, setError, error } = useAuth();
 
@@ -33,7 +33,12 @@ const SignIn = () => {
         .max(255)
         .required()
         .email({ tlds: { allow: false } }),
-      password: joi.string().min(6).max(1024).required(),
+      password: joi
+        .string()
+        .min(6)
+        .max(1024)
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/)
+        .required(),
     }),
   });
 
@@ -80,6 +85,8 @@ const SignIn = () => {
           <button type="submit" className="sign-in-btn">
             Sign in
           </button>
+
+          <Link to={'#'}>Forgot your password?</Link>
         </div>
         <div className="container">
           <h2 className="header">Don't have an account? </h2>

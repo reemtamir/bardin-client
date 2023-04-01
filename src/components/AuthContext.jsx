@@ -19,7 +19,6 @@ import {
   getVipReq,
   deleteVipReq,
   setTokenHeader,
-
 } from '../utils/axios';
 
 export const context = createContext(null);
@@ -89,10 +88,6 @@ const AuthContext = ({ children }) => {
     refreshUser();
   }, []);
 
-  // async function createUser(user) {
-  //   await signUp(user);
-  //   refreshUser();
-  // }
   async function logIn(values, user) {
     try {
       const { data } = await signIn(values);
@@ -101,7 +96,7 @@ const AuthContext = ({ children }) => {
       setTokenHeader();
       setUser(getUser());
 
-      toast(`welcome ${getUser().email}!`);
+      toast(`welcome ${getUser().name}!`);
       return user;
     } catch ({ response }) {
       setError(response.data);
@@ -114,7 +109,7 @@ const AuthContext = ({ children }) => {
       localStorage.setItem('token', data);
       refreshAdmin();
       setTokenHeader();
-      toast(`welcome ${getUser().email}!`);
+      toast(`welcome ${getUser().name}!`);
       return admin;
     } catch ({ response }) {
       setError(response.data);
