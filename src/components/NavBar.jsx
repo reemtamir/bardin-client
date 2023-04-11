@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const NavBar = () => {
-  const { user, favoriteUsers, setIsAdmin } = useAuth();
+  const { user, favoriteUsers, setIsAdmin, blockedUsers } = useAuth();
 
   return (
     <>
@@ -71,6 +71,17 @@ const NavBar = () => {
                     aria-current="page"
                   >
                     Favorites
+                  </Link>
+                </li>
+              ) : null}
+              {blockedUsers.length ? (
+                <li className="nav-item ">
+                  <Link
+                    to={`/blocked`}
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Blocked
                   </Link>
                 </li>
               ) : null}

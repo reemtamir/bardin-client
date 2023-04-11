@@ -15,10 +15,14 @@ import {
   updateVip,
   getFavorites,
   getNotFavorites,
+  getBlocked,
   createVipReq,
   getVipReq,
   deleteVipReq,
   setTokenHeader,
+  blockUser,
+  unblockUser,
+  getUsersWhoDidNotBlockedMe,
 } from '../utils/axios';
 
 export const context = createContext(null);
@@ -26,9 +30,11 @@ const AuthContext = ({ children }) => {
   const [user, setUser] = useState(getUser());
   const [activeUser, setActiveUser] = useState(null);
   const [admin, setAdmin] = useState(null);
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState([]);
   const [favoriteUsers, setFavoriteUsers] = useState([]);
   const [notFavoriteUsers, setNotFavoriteUsers] = useState([]);
+  const [usersNotBlockToShow, setUsersNotBlockToShow] = useState([]);
+  const [blockedUsers, setBlockedUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(admin);
   const [isInMainPage, setIsInMainPage] = useState(true);
   const [error, setError] = useState('');
@@ -67,6 +73,36 @@ const AuthContext = ({ children }) => {
       }
     };
     getAllNotFavorites(user._id);
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const getNonBlockUsers = async (id) => {
+      try {
+        const data = await getUsersWhoDidNotBlockedMe(id);
+
+        setNotFavoriteUsers(data);
+      } catch (error) {
+        return;
+      }
+    };
+    getNonBlockUsers(user._id);
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const getBlockedUsers = async (id) => {
+      try {
+        const data = await getBlocked(id);
+
+        setBlockedUsers(data);
+      } catch (error) {
+        return;
+      }
+    };
+    getBlockedUsers(user._id);
   }, [user]);
   useEffect(() => {
     if (!user) return;
@@ -117,6 +153,32 @@ const AuthContext = ({ children }) => {
 
     return admin;
   }
+
+  async function blockUserById(email, id) {
+    const { data } = await blockUser(id, email);
+
+    for (let user of favoriteUsers) {
+      if (user._id === data._id) {
+        console.log('yes');
+        await removeFromFavorites(id, email);
+        setFavoriteUsers((favoriteUsers) => [
+          ...favoriteUsers.filter((user) => user._id !== data._id),
+        ]);
+      }
+    }
+    for (let user of notFavoriteUsers) {
+      if (user._id === data._id) {
+        console.log('no');
+
+        setNotFavoriteUsers((notFavoriteUsers) => [
+          ...notFavoriteUsers.filter((user) => user._id !== data._id),
+        ]);
+      }
+    }
+
+    setBlockedUsers((blockedUsers) => [...blockedUsers, data]);
+    return data;
+  }
   async function addToFavoritesById(email, id) {
     const { data } = await addToFavorites(id, email);
 
@@ -136,6 +198,16 @@ const AuthContext = ({ children }) => {
 
     return data;
   }
+  async function unblockUserById(email, id) {
+    const { data } = await unblockUser(id, email);
+
+    setNotFavoriteUsers((notFavoriteUsers) => [...notFavoriteUsers, data]);
+    setBlockedUsers((blockedUsers) => [
+      ...blockedUsers.filter((user) => user._id !== data._id),
+    ]);
+    return data;
+  }
+
   function logOut() {
     localStorage.removeItem('token');
     if (user) refreshUser();
@@ -182,6 +254,10 @@ const AuthContext = ({ children }) => {
           deleteVipReq,
           setVipReq,
           setActiveUser,
+          blockUserById,
+          unblockUserById,
+          blockedUsers,
+          usersNotBlockToShow,
         }}
       >
         {children}

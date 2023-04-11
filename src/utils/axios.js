@@ -18,8 +18,17 @@ export const getUsers = async () => {
   const { data } = await axios.get('/users');
   return data;
 };
+export const getUsersWhoDidNotBlockedMe = async (id) => {
+  const { data } = await axios.get(`/users/${id}`);
+  console.log(data);
+  return data;
+};
 export const getFavorites = async (id) => {
   const { data } = await axios.get(`/users/get-favorites/${id}`);
+  return data;
+};
+export const getBlocked = async (id) => {
+  const { data } = await axios.get(`/users/get-blocked/${id}`);
   return data;
 };
 export const getNotFavorites = async (id) => {
@@ -32,6 +41,13 @@ export async function addToFavorites(id, email) {
 }
 export async function removeFromFavorites(id, email) {
   return await axios.post(`/me/remove-favorites/${id}`, { email });
+}
+
+export async function blockUser(id, email) {
+  return await axios.post(`/me/block/${id}`, { email });
+}
+export async function unblockUser(id, email) {
+  return await axios.post(`/me/remove-block/${id}`, { email });
 }
 export async function updateUser(id, user) {
   return await axios.put(`/me/edit/${id}`, user);

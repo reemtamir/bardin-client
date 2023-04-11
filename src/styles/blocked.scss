@@ -1,0 +1,34 @@
+.blocked-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  & > .blocked-container {
+    width: 50%;
+    max-height: 80px;
+    border: 1px solid black;
+    display: flex;
+    background-color: black;
+    justify-content: space-between;
+    margin: auto;
+
+    & > .block-img {
+      width: 20%;
+      margin: 0.2em auto;
+      max-height: 500px;
+    }
+    & > .blocked-card-body {
+      width: 30%;
+      margin: auto;
+      & > .ul > li {
+        color: rgb(241, 240, 240);
+      }
+    }
+
+    & > .blocked-p {
+      color: #43e553;
+      width: 30%;
+      margin: auto;
+      cursor: pointer;
+    }
+  }
+}

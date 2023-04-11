@@ -2,14 +2,14 @@ import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { Navigate } from 'react-router-dom';
 
-const FavoritesPrivateRout = ({ children }) => {
-  const { favoriteUsers, user } = useAuth();
+const BlockedPrivateRout = ({ children }) => {
+  const { blockedUsers, user } = useAuth();
 
-  if (!favoriteUsers.length) {
+  if (!blockedUsers.length) {
     return <Navigate to={`/chat-room/${user._id}`} />;
   }
 
   return children;
 };
 
-export default FavoritesPrivateRout;
+export default BlockedPrivateRout;

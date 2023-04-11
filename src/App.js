@@ -7,6 +7,7 @@ import '../src/styles/main-room.scss';
 import '../src/styles/footer.scss';
 import '../src/styles/vip-req-list.scss';
 import '../src/styles/admin-page.scss';
+import '../src/styles/blocked.scss';
 
 import socketIO from 'socket.io-client';
 import { Route, Routes } from 'react-router-dom';
@@ -32,11 +33,14 @@ import ThankYou from './components/ThankYou';
 import VipReqList from './components/VipReqList';
 import VipReqForm from './components/VipReqForm';
 import AdminNavBar from './components/AdminNavBar';
-import { ToastContainer, toast } from 'react-toastify';
+import BlockedPrivateRout from './components/BlockedPrivateRout';
+import { ToastContainer } from 'react-toastify';
+import ShowBlockedUsers from './components/ShowBlockedUsers';
 import 'react-toastify/dist/ReactToastify.css';
+import { blockUser } from './utils/axios';
 const socket = socketIO.connect('http://localhost:3001');
 function App() {
-  const { favoriteUsers, removeFromFavoritesById, isAdmin, user } = useAuth();
+  const { favoriteUsers, removeFromFavoritesById, isAdmin } = useAuth();
 
   return (
     <>
@@ -119,6 +123,16 @@ function App() {
                   />
                 </div>
               </FavoritesPrivateRout>
+            }
+          ></Route>
+          <Route
+            path="blocked"
+            element={
+              <BlockedPrivateRout>
+                <div className="users">
+                  <ShowBlockedUsers />
+                </div>
+              </BlockedPrivateRout>
             }
           ></Route>
 

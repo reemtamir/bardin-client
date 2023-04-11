@@ -9,6 +9,7 @@ const MainRoom = () => {
     addToFavoritesById,
     removeFromFavoritesById,
     favoriteUsers,
+    usersNotBlockToShow,
     notFavoriteUsers,
     user,
   } = useAuth();
