@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import ShowUsers from './ShowUsers';
+import ShowFavoriteUsersUsers from './ShowFavoriteUsersUsers';
 import UserProfileDisplay from './UserProfileDisplay';
 
 const MainRoom = () => {
@@ -9,8 +10,7 @@ const MainRoom = () => {
     addToFavoritesById,
     removeFromFavoritesById,
     favoriteUsers,
-    usersNotBlockToShow,
-    notFavoriteUsers,
+    otherUsers,
     user,
   } = useAuth();
   const [message, setMessage] = useState('');
@@ -25,25 +25,23 @@ const MainRoom = () => {
       </div>
 
       <div className="users">
-        <ShowUsers
-          users={favoriteUsers}
-          str={'bi bi-star-fill'}
-          fn={removeFromFavoritesById}
-        />
-
+        {favoriteUsers.length ? (
+          <>
+            <ShowFavoriteUsersUsers
+              str={'bi bi-star-fill'}
+              fn={removeFromFavoritesById}
+            />
+          </>
+        ) : null}
         {user.vip ? (
           <ShowUsers
-            users={notFavoriteUsers}
+            users={otherUsers}
             str={'bi bi-star'}
             fn={addToFavoritesById}
           />
         ) : (
           <div className="users">
-            <ShowUsers
-              users={notFavoriteUsers.filter((user, index) => index % 2 === 0)}
-              str={'bi bi-star'}
-              fn={showAlert}
-            />
+            <ShowUsers users={otherUsers} str={'bi bi-star'} fn={showAlert} />
 
             {message && (
               <div className="vip-alert-div">

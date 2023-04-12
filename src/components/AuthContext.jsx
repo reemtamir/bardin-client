@@ -14,7 +14,6 @@ import {
   signInAdmin,
   updateVip,
   getFavorites,
-  getNotFavorites,
   getBlocked,
   createVipReq,
   getVipReq,
@@ -28,12 +27,11 @@ import {
 export const context = createContext(null);
 const AuthContext = ({ children }) => {
   const [user, setUser] = useState(getUser());
-  const [activeUser, setActiveUser] = useState(null);
+  const [activeUser, setActiveUser] = useState(user);
   const [admin, setAdmin] = useState(null);
-  const [users, setUsers] = useState([]);
   const [favoriteUsers, setFavoriteUsers] = useState([]);
-  const [notFavoriteUsers, setNotFavoriteUsers] = useState([]);
-  const [usersNotBlockToShow, setUsersNotBlockToShow] = useState([]);
+  const [favoriteUsersIds, setFavoriteUsersIds] = useState([]);
+  const [otherUsers, setOtherUsers] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(admin);
   const [isInMainPage, setIsInMainPage] = useState(true);
@@ -48,14 +46,25 @@ const AuthContext = ({ children }) => {
     };
     getVips();
   }, [vipUsers]);
+
   useEffect(() => {
     setIsAdmin(admin);
   }, [admin]);
   useEffect(() => {
     if (!user) return;
     const getAllFavorites = async (user) => {
-      const data = await getFavorites(user._id);
-      setFavoriteUsers(data);
+      const favoriteUsersIdString = await getFavorites(user._id);
+      for (let str of favoriteUsersIdString) {
+        const { data: favorite } = await myProfile(str);
+
+        setFavoriteUsers((users) => {
+          if (users.some((user) => user._id === favorite._id)) {
+            return users; // User already exists, return the existing array
+          } else {
+            return [...users, favorite]; // User doesn't exist, add the new user to the array
+          }
+        });
+      }
     };
     getAllFavorites(user);
   }, [user]);
@@ -63,32 +72,54 @@ const AuthContext = ({ children }) => {
   useEffect(() => {
     if (!user) return;
 
-    const getAllNotFavorites = async (id) => {
-      try {
-        const data = await getNotFavorites(id);
-
-        setNotFavoriteUsers(data);
-      } catch (error) {
-        return;
-      }
-    };
-    getAllNotFavorites(user._id);
-  }, [user]);
-
-  useEffect(() => {
-    if (!user) return;
-
     const getNonBlockUsers = async (id) => {
       try {
-        const data = await getUsersWhoDidNotBlockedMe(id);
+        const notBlockedUsers = await getUsersWhoDidNotBlockedMe(id);
+        console.log(notBlockedUsers);
 
-        setNotFavoriteUsers(data);
+        const notBlockedUserIds = []; // Array of not blocked users's ids
+
+        // Push each not-blocked user id to notBlockedUserIds
+        for (const user of notBlockedUsers) {
+          notBlockedUserIds.push(user._id);
+        }
+
+        const favoriteUsersIds = []; // Array of favorite users' ids
+
+        // Push each user id to favoriteUsersIds
+        for (let fav of favoriteUsers) {
+          favoriteUsersIds.push(fav._id.toString());
+          console.log('favoriteUsersIds', favoriteUsersIds);
+        }
+
+        const manageUsersToRender = async () => {
+          const usersToRender = [];
+
+          for (const id of notBlockedUserIds) {
+          
+            if (!favoriteUsersIds.includes(id)) {
+              // Get user from database with id
+              const { data: user } = await myProfile(id);
+         
+              // Push that user to usersToRender
+              usersToRender.push(user);
+            }
+          }
+
+          // Set otherUsers's state with usersToRender
+          // which contains all the user who are not blocked and not in favorites
+          setOtherUsers(usersToRender);
+
+      
+        };
+
+        manageUsersToRender();
       } catch (error) {
         return;
       }
     };
     getNonBlockUsers(user._id);
-  }, [user]);
+  }, [user, favoriteUsers]);
 
   useEffect(() => {
     if (!user) return;
@@ -156,26 +187,28 @@ const AuthContext = ({ children }) => {
 
   async function blockUserById(email, id) {
     const { data } = await blockUser(id, email);
-
+    console.log(data);
     for (let user of favoriteUsers) {
       if (user._id === data._id) {
-        console.log('yes');
         await removeFromFavorites(id, email);
         setFavoriteUsers((favoriteUsers) => [
           ...favoriteUsers.filter((user) => user._id !== data._id),
         ]);
       }
     }
-    for (let user of notFavoriteUsers) {
+    for (let user of otherUsers) {
       if (user._id === data._id) {
-        console.log('no');
-
-        setNotFavoriteUsers((notFavoriteUsers) => [
-          ...notFavoriteUsers.filter((user) => user._id !== data._id),
+        setOtherUsers((otherUsers) => [
+          ...otherUsers.filter((user) => user._id !== data._id),
         ]);
       }
     }
 
+    setUser((user) => ({
+      ...user,
+      blockList: [...user.blockList, data],
+      favorites: user.favorites.filter((favUser) => favUser._id !== data._id),
+    }));
     setBlockedUsers((blockedUsers) => [...blockedUsers, data]);
     return data;
   }
@@ -183,28 +216,39 @@ const AuthContext = ({ children }) => {
     const { data } = await addToFavorites(id, email);
 
     setFavoriteUsers((favoriteUsers) => [...favoriteUsers, data]);
-    setNotFavoriteUsers((notFavoriteUsers) => [
-      ...notFavoriteUsers.filter((user) => user._id !== data._id),
+    setOtherUsers((otherUsers) => [
+      ...otherUsers.filter((user) => user._id !== id),
     ]);
-    return data;
+
+    return id;
   }
   async function removeFromFavoritesById(email, id) {
     const { data } = await removeFromFavorites(id, email);
+    console.log(data);
 
-    setNotFavoriteUsers((notFavoriteUsers) => [...notFavoriteUsers, data]);
+    setOtherUsers((otherUsers) => [...otherUsers, data]);
     setFavoriteUsers((favoriteUsers) => [
-      ...favoriteUsers.filter((user) => user._id !== data._id),
+      ...favoriteUsers.filter(
+        (user) => user._id.toString() !== data._id.toString()
+      ),
     ]);
+    console.log(favoriteUsers, '2');
 
     return data;
   }
   async function unblockUserById(email, id) {
     const { data } = await unblockUser(id, email);
 
-    setNotFavoriteUsers((notFavoriteUsers) => [...notFavoriteUsers, data]);
+    setOtherUsers((otherUsers) => [...otherUsers, data]);
     setBlockedUsers((blockedUsers) => [
       ...blockedUsers.filter((user) => user._id !== data._id),
     ]);
+    setUser((user) => ({
+      ...user,
+      blockList: user.blockList.filter(
+        (blockedUser) => blockedUser._id !== data._id
+      ),
+    }));
     return data;
   }
 
@@ -214,6 +258,7 @@ const AuthContext = ({ children }) => {
     if (admin) refreshAdmin();
     setIsAdmin(false);
     setFavoriteUsers([]);
+    setBlockedUsers([]);
     setActiveUser(null);
     setError('');
   }
@@ -235,9 +280,8 @@ const AuthContext = ({ children }) => {
           removeFromFavoritesById,
           setUser,
           favoriteUsers,
-          notFavoriteUsers,
-          users,
-          setUsers,
+          otherUsers,
+
           signUpAdmin,
           logInAdmin,
           admin,
@@ -257,7 +301,6 @@ const AuthContext = ({ children }) => {
           blockUserById,
           unblockUserById,
           blockedUsers,
-          usersNotBlockToShow,
         }}
       >
         {children}

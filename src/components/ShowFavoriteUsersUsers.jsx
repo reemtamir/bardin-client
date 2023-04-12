@@ -2,23 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-const ShowUsers = ({ users, str, fn }) => {
-  const { user, blockUserById } = useAuth();
-  if (!users) return;
-
-  const userFavorites = user.favorites;
-
-  const filteredUsers = [].concat(
-    ...userFavorites.map((favorite) =>
-      users.filter((user) => {
-        return favorite._id !== user._id;
-      })
-    )
-  );
+const ShowFavoriteUsersUsers = ({ str, fn }) => {
+  const { favoriteUsers, user, blockUserById } = useAuth();
 
   return (
     <>
-      {users.map((element, index) => {
+      {favoriteUsers.map((element, index) => {
         return (
           <div key={index} className="users-container">
             <i
@@ -52,7 +41,7 @@ const ShowUsers = ({ users, str, fn }) => {
               </ul>
             </div>
             <Link className="link" to="/private">
-              Send private message
+              Send private messagehtyt
             </Link>
           </div>
         );
@@ -61,4 +50,4 @@ const ShowUsers = ({ users, str, fn }) => {
   );
 };
 
-export default ShowUsers;
+export default ShowFavoriteUsersUsers;

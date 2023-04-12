@@ -20,7 +20,7 @@ export const getUsers = async () => {
 };
 export const getUsersWhoDidNotBlockedMe = async (id) => {
   const { data } = await axios.get(`/users/${id}`);
-  console.log(data);
+
   return data;
 };
 export const getFavorites = async (id) => {
