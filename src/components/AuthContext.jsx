@@ -32,7 +32,7 @@ const AuthContext = ({ children }) => {
   const [favoriteUsers, setFavoriteUsers] = useState([]);
   const [otherUsers, setOtherUsers] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(admin);
+  const [isAdmin, setIsAdmin] = useState('');
   const [isInMainPage, setIsInMainPage] = useState(true);
   const [error, setError] = useState('');
   const [vipUsers, setVipUsers] = useState([]);

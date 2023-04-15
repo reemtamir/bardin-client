@@ -43,9 +43,7 @@ const AdminEditPage = () => {
                     await updateVip(id, target.id, element.vip ? false : true);
                     setVipUsers((vipUsers) => !vipUsers);
                     toast(
-                      `${
-                        target.id
-                      }'s VIP status has updated too ${!element.vip}`
+                      `${target.id}'s VIP status has updated to ${!element.vip}`
                     );
                   } catch (error) {
                     console.log(error);

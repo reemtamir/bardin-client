@@ -30,8 +30,8 @@ const VipReqList = () => {
       <div className="vip-req-container">
         {vipReq.map((req) => {
           return (
-            <div key={req.email}>
-              <ul>
+            <div className="vip-req-div" key={req.email}>
+              <ul className="vip-req-ul">
                 <li> Card Number- {req.cardNumber}</li>
                 <li>
                   {' '}
@@ -40,53 +40,53 @@ const VipReqList = () => {
                     {' '}
                     {req.email}
                   </Link>{' '}
-                  <div>
-                    <button
-                      id={req.email}
-                      onClick={async ({ target }) => {
-                        try {
-                          await updateVip(
-                            admin._id,
-                            target.id,
-                            req.vip ? false : true
-                          );
-                          await deleteVipReq(admin._id, target.id);
-                          await setVipUsers((vipUsers) => !vipUsers);
-                          await setVipReq(
-                            vipReq.filter((req) => req.email !== target.id)
-                          );
-                          toast(
-                            `${
-                              req.email
-                            }'s VIP status has updated too ${!req.vip}`
-                          );
-                        } catch (error) {
-                          console.log(error);
-                        }
-                      }}
-                    >
-                      {' '}
-                      Make VIP
-                    </button>
-                    <button
-                      id={req.email}
-                      onClick={async ({ target }) => {
-                        try {
-                          await deleteVipReq(admin._id, target.id);
-                          await setVipReq(
-                            vipReq.filter((req) => req.email !== target.id)
-                          );
-                          toast(`Deleted ${req.email}'s req`);
-                        } catch (error) {
-                          console.log(error);
-                        }
-                      }}
-                    >
-                      Delete req
-                    </button>
-                  </div>
                 </li>
               </ul>
+              <div className="vip-req-btns-div">
+                <button
+                  className="make-vip-btn"
+                  id={req.email}
+                  onClick={async ({ target }) => {
+                    try {
+                      await updateVip(
+                        admin._id,
+                        target.id,
+                        req.vip ? false : true
+                      );
+                      await deleteVipReq(admin._id, target.id);
+                      await setVipUsers((vipUsers) => !vipUsers);
+                      await setVipReq(
+                        vipReq.filter((req) => req.email !== target.id)
+                      );
+                      toast(
+                        `${req.email}'s VIP status has updated to ${!req.vip}`
+                      );
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }}
+                >
+                  {' '}
+                  Make VIP
+                </button>
+                <button
+                  className="delete-vip-btn"
+                  id={req.email}
+                  onClick={async ({ target }) => {
+                    try {
+                      await deleteVipReq(admin._id, target.id);
+                      await setVipReq(
+                        vipReq.filter((req) => req.email !== target.id)
+                      );
+                      toast(`Deleted ${req.email}'s req`);
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }}
+                >
+                  Delete req
+                </button>
+              </div>
             </div>
           );
         })}
