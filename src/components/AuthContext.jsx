@@ -146,6 +146,7 @@ const AuthContext = ({ children }) => {
     setAdmin(getUser());
   }
   useEffect(() => {
+    setAdmin('');
     refreshUser();
   }, []);
 
