@@ -2,34 +2,35 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-const ShowUsers = ({ users, str, fn }) => {
+const ShowUsers = ({ users, str, fn, blockFn }) => {
   const { user, blockUserById } = useAuth();
+  const [blockedUser, setBlockedUser] = useState(null);
+
   if (!users) return;
-
-  const userFavorites = user.favorites;
-
-  const filteredUsers = [].concat(
-    ...userFavorites.map((favorite) =>
-      users.filter((user) => {
-        return favorite._id !== user._id;
-      })
-    )
-  );
 
   return (
     <>
       {users.map((element, index) => {
         return (
           <div key={index} className="users-container">
-            <i
-              className={`bi bi-dash-circle-fill`}
-              id={element._id}
-              onClick={async () => {
-                const data = await blockUserById(user.email, element._id);
+            {user.vip ? (
+              <i
+                className={`bi bi-dash-circle-fill`}
+                id={element._id}
+                onClick={() => {
+                  setBlockedUser({ name: element.name, id: element._id });
+                }}
+              ></i>
+            ) : (
+              <i
+                className={`bi bi-dash-circle-fill`}
+                id={element._id}
+                onClick={() => {
+                  blockFn();
+                }}
+              ></i>
+            )}
 
-                return data;
-              }}
-            ></i>
             <i
               className={`${str}`}
               id={element._id}
@@ -57,6 +58,35 @@ const ShowUsers = ({ users, str, fn }) => {
           </div>
         );
       })}
+      {blockedUser && (
+        <div className="block-alert-div">
+          <div className="block-alert-message">
+            {' '}
+            Are you sure you want to block {blockedUser.name}?{' '}
+          </div>
+          <div className="block-alert-btns-div">
+            <button
+              className="block-alert-btn-return"
+              onClick={() => setBlockedUser(null)}
+            >
+              {' '}
+              Return
+            </button>
+            <button
+              style={{ textDecoration: 'none', color: 'black' }}
+              onClick={async () => {
+                const data = await blockUserById(user.email, blockedUser.id);
+                setBlockedUser(null);
+                return data;
+              }}
+              className=" block-alert-btn-block "
+            >
+              {' '}
+              Block
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

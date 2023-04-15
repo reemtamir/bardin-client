@@ -28,9 +28,8 @@ export const context = createContext(null);
 const AuthContext = ({ children }) => {
   const [user, setUser] = useState(getUser());
   const [activeUser, setActiveUser] = useState(user);
-  const [admin, setAdmin] = useState(null);
+  const [admin, setAdmin] = useState(getUser());
   const [favoriteUsers, setFavoriteUsers] = useState([]);
-  const [favoriteUsersIds, setFavoriteUsersIds] = useState([]);
   const [otherUsers, setOtherUsers] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(admin);
@@ -75,7 +74,6 @@ const AuthContext = ({ children }) => {
     const getNonBlockUsers = async (id) => {
       try {
         const notBlockedUsers = await getUsersWhoDidNotBlockedMe(id);
-        console.log(notBlockedUsers);
 
         const notBlockedUserIds = []; // Array of not blocked users's ids
 
@@ -89,18 +87,16 @@ const AuthContext = ({ children }) => {
         // Push each user id to favoriteUsersIds
         for (let fav of favoriteUsers) {
           favoriteUsersIds.push(fav._id.toString());
-          console.log('favoriteUsersIds', favoriteUsersIds);
         }
 
         const manageUsersToRender = async () => {
           const usersToRender = [];
 
           for (const id of notBlockedUserIds) {
-          
             if (!favoriteUsersIds.includes(id)) {
               // Get user from database with id
               const { data: user } = await myProfile(id);
-         
+
               // Push that user to usersToRender
               usersToRender.push(user);
             }
@@ -109,8 +105,6 @@ const AuthContext = ({ children }) => {
           // Set otherUsers's state with usersToRender
           // which contains all the user who are not blocked and not in favorites
           setOtherUsers(usersToRender);
-
-      
         };
 
         manageUsersToRender();
@@ -187,7 +181,7 @@ const AuthContext = ({ children }) => {
 
   async function blockUserById(email, id) {
     const { data } = await blockUser(id, email);
-    console.log(data);
+
     for (let user of favoriteUsers) {
       if (user._id === data._id) {
         await removeFromFavorites(id, email);
@@ -224,7 +218,6 @@ const AuthContext = ({ children }) => {
   }
   async function removeFromFavoritesById(email, id) {
     const { data } = await removeFromFavorites(id, email);
-    console.log(data);
 
     setOtherUsers((otherUsers) => [...otherUsers, data]);
     setFavoriteUsers((favoriteUsers) => [
@@ -232,7 +225,6 @@ const AuthContext = ({ children }) => {
         (user) => user._id.toString() !== data._id.toString()
       ),
     ]);
-    console.log(favoriteUsers, '2');
 
     return data;
   }
@@ -260,6 +252,8 @@ const AuthContext = ({ children }) => {
     setFavoriteUsers([]);
     setBlockedUsers([]);
     setActiveUser(null);
+    setOtherUsers([]);
+    setVipReq([]);
     setError('');
   }
 

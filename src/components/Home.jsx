@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
-const Home = () => {
+const Home = ({ img }) => {
   return (
     <div className="container">
-      <img
-        style={{ width: '50vw' }}
-        src="https://logos.flamingtext.com/City-Logos/Bardin-Water-Logo.png"
-        alt="logo"
-      />
+      <img style={{ width: '50vw' }} src={img} alt="logo" />
     </div>
   );
 };

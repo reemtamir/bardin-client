@@ -16,7 +16,6 @@ const VipReq = () => {
     setError,
     activeUser,
     setIsInMainPage,
-    vipReq,
   } = useAuth();
   const navigate = useNavigate();
 

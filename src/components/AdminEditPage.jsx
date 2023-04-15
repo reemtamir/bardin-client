@@ -15,7 +15,7 @@ const AdminEditPage = () => {
       setUsers(allUsers);
     };
     getAllUsers();
-  }, [vipUsers]);
+  }, [vipUsers, getUsers]);
 
   return (
     <>

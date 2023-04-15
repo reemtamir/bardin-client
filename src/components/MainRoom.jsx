@@ -13,9 +13,10 @@ const MainRoom = () => {
     otherUsers,
     user,
   } = useAuth();
-  const [message, setMessage] = useState('');
+  const [vipMessage, setVipMessage] = useState('');
+
   const showAlert = () => {
-    setMessage('Only for VIP members');
+    setVipMessage('Only for VIP members');
   };
 
   return (
@@ -30,6 +31,7 @@ const MainRoom = () => {
             <ShowFavoriteUsersUsers
               str={'bi bi-star-fill'}
               fn={removeFromFavoritesById}
+              blockFn={showAlert}
             />
           </>
         ) : null}
@@ -41,15 +43,20 @@ const MainRoom = () => {
           />
         ) : (
           <div className="users">
-            <ShowUsers users={otherUsers} str={'bi bi-star'} fn={showAlert} />
+            <ShowUsers
+              users={otherUsers.filter((user, index) => index % 3 !== 1)}
+              str={'bi bi-star'}
+              blockFn={showAlert}
+              fn={showAlert}
+            />
 
-            {message && (
+            {vipMessage && (
               <div className="vip-alert-div">
-                <div className="vip-alert-message">{message}</div>
+                <div className="vip-alert-message">{vipMessage}</div>
                 <div className="vip-alert-btns-div">
                   <button
                     className="vip-alert-btn-return"
-                    onClick={() => setMessage('')}
+                    onClick={() => setVipMessage('')}
                   >
                     {' '}
                     Return

@@ -1,9 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+
 import { useAuth } from '../hooks/useAuth';
 
 const ShowBlockedUsers = () => {
   const { user, unblockUserById, blockedUsers } = useAuth();
+  const [blockedUser, setBlockedUser] = useState(null);
   if (!blockedUsers.length) return;
   return (
     <>
@@ -21,19 +22,46 @@ const ShowBlockedUsers = () => {
               alt={`${element.name} `}
             />
             <p
+              onClick={() => {
+                setBlockedUser({ name: element.name, id: element._id });
+              }}
               className={` blocked-p `}
               id={element._id}
-              onClick={async () => {
-                const data = await unblockUserById(user.email, element._id);
-
-                return data;
-              }}
             >
               Remove from block list
             </p>
           </div>
         ))}
       </div>
+      {blockedUser && (
+        <div className="block-alert-div">
+          <div className="block-alert-message">
+            {' '}
+            Unblock {blockedUser.name}?{' '}
+          </div>
+          <div className="block-alert-btns-div">
+            <button
+              className="block-alert-btn-return"
+              onClick={() => setBlockedUser(null)}
+            >
+              {' '}
+              Return
+            </button>
+            <button
+              style={{ textDecoration: 'none', color: 'black' }}
+              onClick={async () => {
+                const data = await unblockUserById(user.email, blockedUser.id);
+                setBlockedUser(null);
+                return data;
+              }}
+              className=" block-alert-btn-block "
+            >
+              {' '}
+              Unblock
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

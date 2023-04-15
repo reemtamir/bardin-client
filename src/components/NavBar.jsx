@@ -81,7 +81,7 @@ const NavBar = () => {
                     className="nav-link active"
                     aria-current="page"
                   >
-                    Blocked
+                    Block List
                   </Link>
                 </li>
               ) : null}

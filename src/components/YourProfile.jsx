@@ -16,7 +16,9 @@ const YourProfile = () => {
   useEffect(() => {
     if (!activeUser) return;
     setActiveUser(activeUser);
-    const { age, _id, vip, createdAt, __v, favorites, ...rest } = activeUser;
+
+    const { age, _id, vip, createdAt, __v, favorites, blockList, ...rest } =
+      activeUser;
     form.setValues({
       ...rest,
     });
@@ -78,6 +80,7 @@ const YourProfile = () => {
         navigate(`/chat-room/${user._id}`);
       } catch ({ response }) {
         setError(response.data);
+        console.log(response.data);
       }
     },
   });

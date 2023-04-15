@@ -10,7 +10,7 @@ import '../src/styles/admin-page.scss';
 import '../src/styles/blocked.scss';
 
 import socketIO from 'socket.io-client';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import PrivateRout from './components/PrivateRout';
 import Home from './components/Home';
 import Footer from './components/Footer';
@@ -37,10 +37,62 @@ import BlockedPrivateRout from './components/BlockedPrivateRout';
 import { ToastContainer } from 'react-toastify';
 import ShowBlockedUsers from './components/ShowBlockedUsers';
 import 'react-toastify/dist/ReactToastify.css';
-import { blockUser } from './utils/axios';
+import { useEffect, useState } from 'react';
+import { getRandomeColor } from './utils/randomColor';
+import { Link } from 'react-router-dom';
+
 const socket = socketIO.connect('http://localhost:3001');
 function App() {
-  const { favoriteUsers, removeFromFavoritesById, isAdmin } = useAuth();
+  const { favoriteUsers, removeFromFavoritesById, isAdmin, user, admin } =
+    useAuth();
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [randomColor, setRandomeColor] = useState(getRandomeColor());
+  const [vipMessage, setVipMessage] = useState('');
+
+  const showAlert = () => {
+    setVipMessage('Only for VIP members');
+  };
+
+  useEffect(() => {
+    let logInTimeOutId;
+    let alertTimeOut;
+    let randomeColorInterval;
+    const resetTimeout = () => {
+      clearTimeout(logInTimeOutId);
+      clearTimeout(alertTimeOut);
+      clearInterval(randomeColorInterval);
+
+      alertTimeOut = setTimeout(() => {
+        setIsLoggedIn(true);
+        randomeColorInterval = setInterval(() => {
+          setRandomeColor(getRandomeColor());
+        }, 500);
+        logInTimeOutId = setTimeout(() => {
+          navigate('/log-out');
+          setIsLoggedIn(false);
+        }, 50000);
+      }, 60000);
+    };
+
+    const onActivity = () => {
+      resetTimeout();
+      setIsLoggedIn(false);
+      clearInterval(randomeColorInterval);
+    };
+
+    document.addEventListener('mousemove', onActivity);
+    document.addEventListener('keydown', onActivity);
+
+    resetTimeout();
+
+    return () => {
+      document.removeEventListener('mousemove', onActivity);
+      document.removeEventListener('keydown', onActivity);
+      clearTimeout(logInTimeOutId);
+      clearTimeout(alertTimeOut);
+    };
+  }, [user, navigate]);
 
   return (
     <>
@@ -58,8 +110,24 @@ function App() {
         theme="light"
       />
       <div className="app">
+        {(user || admin) && isLoggedIn && (
+          <div className="disconnect-alert">
+            <p style={{ color: randomColor }} className="disconnect-alert-p">
+              You will be disconnected in a few seconds
+            </p>
+          </div>
+        )}
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route
+            path="/"
+            element={
+              <Home
+                img={
+                  'https://logos.flamingtext.com/City-Logos/Bardin-Water-Logo.png'
+                }
+              />
+            }
+          ></Route>
           <Route path="sign-up" element={<SignUp />}></Route>
           <Route path="sign-up-admin" element={<SignUpAdmin />}></Route>
           <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
@@ -117,10 +185,33 @@ function App() {
               <FavoritesPrivateRout>
                 <div className="users">
                   <ShowUsers
+                    fn={removeFromFavoritesById}
                     users={favoriteUsers}
                     str={'bi bi-star-fill'}
-                    fn={removeFromFavoritesById}
+                    blockFn={showAlert}
                   />
+                  {vipMessage && (
+                    <div className="vip-alert-div">
+                      <div className="vip-alert-message">{vipMessage}</div>
+                      <div className="vip-alert-btns-div">
+                        <button
+                          className="vip-alert-btn-return"
+                          onClick={() => setVipMessage('')}
+                        >
+                          {' '}
+                          Return
+                        </button>
+                        <Link
+                          style={{ textDecoration: 'none', color: 'black' }}
+                          to={'/vip-req-form'}
+                          className=" vip-alert-btn-get-vip "
+                        >
+                          {' '}
+                          Get vip
+                        </Link>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </FavoritesPrivateRout>
             }

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-
+import Home from './Home';
 import AdminNavBar from './AdminNavBar';
 
 const AdminPage = () => {
   const { admin, getUsers, setIsInMainPage } = useAuth();
-  const [users, setUsers] = useState([]);
+  const [setUsers] = useState([]);
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -19,7 +19,13 @@ const AdminPage = () => {
   return (
     <>
       <AdminNavBar />
-
+      {!admin && (
+        <Home
+          img={
+            'https://thumbs.dreamstime.com/b/admin-sign-laptop-icon-stock-vector-166205404.jpg'
+          }
+        />
+      )}
       {admin && (
         <div className="admin-page-container">
           <p className="admin-page-p">
