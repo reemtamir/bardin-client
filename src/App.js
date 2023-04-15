@@ -71,8 +71,8 @@ function App() {
         logInTimeOutId = setTimeout(() => {
           navigate('/log-out');
           setIsLoggedIn(false);
-        }, 5000);
-      }, 6000);
+        }, 55000);
+      }, 60000);
     };
 
     const onActivity = () => {
