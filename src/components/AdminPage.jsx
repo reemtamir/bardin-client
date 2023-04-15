@@ -6,7 +6,7 @@ import AdminNavBar from './AdminNavBar';
 
 const AdminPage = () => {
   const { admin, getUsers, setIsInMainPage } = useAuth();
-  const [setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const getAllUsers = async () => {

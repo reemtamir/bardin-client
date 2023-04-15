@@ -253,7 +253,7 @@ const AuthContext = ({ children }) => {
     setBlockedUsers([]);
     setActiveUser(null);
     setOtherUsers([]);
-    setVipReq([]);
+
     setError('');
   }
 

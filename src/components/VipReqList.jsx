@@ -30,20 +30,17 @@ const VipReqList = () => {
       <div className="vip-req-container">
         {vipReq.map((req) => {
           return (
-            <div className="vip-req" key={req.email}>
-              <ul className="vip-req-ul">
-                <li className="vip-req-number">
-                  {' '}
-                  Card Number- {req.cardNumber}
-                </li>
-                <li className="vip-req-email">
+            <div key={req.email}>
+              <ul>
+                <li> Card Number- {req.cardNumber}</li>
+                <li>
                   {' '}
                   Email-
                   <Link onClick={() => {}} to={`/edit-users/${admin._id}`}>
                     {' '}
                     {req.email}
                   </Link>{' '}
-                  <div className="confirm-vip-btns">
+                  <div>
                     <button
                       id={req.email}
                       onClick={async ({ target }) => {
