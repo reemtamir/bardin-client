@@ -30,6 +30,7 @@ const AuthContext = ({ children }) => {
   const [activeUser, setActiveUser] = useState(user);
   const [admin, setAdmin] = useState(getUser());
   const [favoriteUsers, setFavoriteUsers] = useState([]);
+
   const [otherUsers, setOtherUsers] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState('');
@@ -199,11 +200,6 @@ const AuthContext = ({ children }) => {
       }
     }
 
-    setUser((user) => ({
-      ...user,
-      blockList: [...user.blockList, data],
-      favorites: user.favorites.filter((favUser) => favUser._id !== data._id),
-    }));
     setBlockedUsers((blockedUsers) => [...blockedUsers, data]);
     return data;
   }
@@ -236,12 +232,7 @@ const AuthContext = ({ children }) => {
     setBlockedUsers((blockedUsers) => [
       ...blockedUsers.filter((user) => user._id !== data._id),
     ]);
-    setUser((user) => ({
-      ...user,
-      blockList: user.blockList.filter(
-        (blockedUser) => blockedUser._id !== data._id
-      ),
-    }));
+
     return data;
   }
 

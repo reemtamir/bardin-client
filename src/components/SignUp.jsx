@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import joi from 'joi';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
@@ -9,6 +9,7 @@ import Joi from 'joi';
 import { toast } from 'react-toastify';
 const SignUp = () => {
   const { signUp, error, setError } = useAuth();
+  const [imageUrl, setImageUrl] = useState('');
   useEffect(() => {
     setError('');
   }, []);
@@ -27,13 +28,8 @@ const SignUp = () => {
     async onSubmit(values) {
       try {
         let { confirmedPassword, image, ...rest } = values;
-        const userImage =
-          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-        if (!image) {
-          image = userImage;
-        }
 
-        const { data } = await signUp({ ...rest, image });
+        const { data } = await signUp({ ...rest, image: imageUrl });
 
         toast(` ${data.name} has just created 🙂`);
         navigate('/sign-in');
@@ -75,6 +71,20 @@ const SignUp = () => {
       image: Joi.string().allow(''),
     }),
   });
+
+  const handleUploadChange = (e) => {
+    handleUpload(e.target.files[0]);
+  };
+
+  const handleUpload = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const base64EncodedFile = reader.result;
+
+      setImageUrl(base64EncodedFile);
+    };
+  };
 
   return (
     <>
@@ -190,13 +200,13 @@ const SignUp = () => {
 
         <div className="container">
           <Input
-            {...form.getFieldProps('image')}
+            onChange={handleUploadChange}
             label={'Image'}
-            type="text"
+            type="file"
             id="image"
-            placeholder="fix upload image"
             labelClass={'label'}
             inputClass={'input'}
+            accept="image/png, image/jpeg"
             error={form.touched.image && form.errors.image}
           />
         </div>
