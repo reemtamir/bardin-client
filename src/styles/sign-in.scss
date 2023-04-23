@@ -28,6 +28,11 @@
   text-align: center;
   margin: auto;
 }
+.image-input {
+  @extend .input;
+  width: 50%;
+  margin: auto;
+}
 .sign-in-btn,
 .sign-up-btn {
   margin-top: 1em;

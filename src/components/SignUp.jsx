@@ -8,8 +8,8 @@ import Input from './Input';
 import Joi from 'joi';
 import { toast } from 'react-toastify';
 const SignUp = () => {
-  const { signUp, error, setError } = useAuth();
-  const [imageUrl, setImageUrl] = useState('');
+  const { signUp, error, setError, imageUrl, setImageUrl } = useAuth();
+
   useEffect(() => {
     setError('');
   }, []);
@@ -205,7 +205,7 @@ const SignUp = () => {
             type="file"
             id="image"
             labelClass={'label'}
-            inputClass={'input'}
+            inputClass={'image-input'}
             accept="image/png, image/jpeg"
             error={form.touched.image && form.errors.image}
           />

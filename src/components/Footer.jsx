@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <>
-      <div className="footer">
+      <div style={{ marginTop: ' 2rem' }} className="footer">
         <a href="https://www.linkedin.com/" target="_blank">
           <img
             className="img"

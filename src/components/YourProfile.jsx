@@ -9,8 +9,16 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 const YourProfile = () => {
-  const { activeUser, user, updateUser, setActiveUser, error, setError } =
-    useAuth();
+  const {
+    activeUser,
+    user,
+    updateUser,
+    setActiveUser,
+    error,
+    setError,
+    imageUrl,
+    setImageUrl,
+  } = useAuth();
   const navigate = useNavigate();
   const [isDelete, setIsDelete] = useState(false);
   useEffect(() => {
@@ -66,13 +74,12 @@ const YourProfile = () => {
 
     async onSubmit(values) {
       let { confirmedPassword, image, ...body } = values;
-      const userImage =
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-      if (!image) {
-        image = userImage;
-      }
+
       try {
-        const { data } = await updateUser(user._id, { ...body, image });
+        const { data } = await updateUser(user._id, {
+          ...body,
+          image: imageUrl,
+        });
 
         setActiveUser(data);
 
@@ -84,6 +91,20 @@ const YourProfile = () => {
       }
     },
   });
+  const handleUploadChange = (e) => {
+    handleUpload(e.target.files[0]);
+  };
+
+  const handleUpload = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const base64EncodedFile = reader.result;
+
+      setImageUrl(base64EncodedFile);
+    };
+  };
+
   useEffect(() => {
     setError('');
   }, []);
@@ -188,12 +209,13 @@ const YourProfile = () => {
 
         <div className="container">
           <Input
-            {...form.getFieldProps('image')}
+            onChange={handleUploadChange}
             label={'Image'}
-            type="text"
+            type="file"
             id="image"
             labelClass={'label'}
-            inputClass={'input fs-5'}
+            inputClass={'image-input'}
+            accept="image/png, image/jpeg"
             error={form.touched.image && form.errors.image}
           />
           <button type="submit" className="sign-up-btn">

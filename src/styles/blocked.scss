@@ -1,9 +1,10 @@
 .blocked-list {
+  width: 80%;
   display: flex;
   flex-direction: column;
   gap: 1em;
   & > .blocked-container {
-    width: 50%;
+    width: 60%;
     max-height: 80px;
     border: 1px solid black;
     display: flex;

@@ -30,7 +30,6 @@ const AuthContext = ({ children }) => {
   const [activeUser, setActiveUser] = useState(user);
   const [admin, setAdmin] = useState(getUser());
   const [favoriteUsers, setFavoriteUsers] = useState([]);
-
   const [otherUsers, setOtherUsers] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState('');
@@ -38,7 +37,7 @@ const AuthContext = ({ children }) => {
   const [error, setError] = useState('');
   const [vipUsers, setVipUsers] = useState([]);
   const [vipReq, setVipReq] = useState([]);
-
+  const [imageUrl, setImageUrl] = useState('');
   useEffect(() => {
     const getVips = async () => {
       const { data } = await getVipReq();
@@ -245,7 +244,6 @@ const AuthContext = ({ children }) => {
     setBlockedUsers([]);
     setActiveUser(null);
     setOtherUsers([]);
-
     setError('');
   }
 
@@ -287,6 +285,8 @@ const AuthContext = ({ children }) => {
           blockUserById,
           unblockUserById,
           blockedUsers,
+          imageUrl,
+          setImageUrl,
         }}
       >
         {children}
