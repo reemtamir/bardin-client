@@ -71,7 +71,7 @@ function App() {
         logInTimeOutId = setTimeout(() => {
           navigate('/log-out');
           setIsLoggedIn(false);
-        }, 55000);
+        }, 5000);
       }, 60000);
     };
 
@@ -117,137 +117,138 @@ function App() {
             </p>
           </div>
         )}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                img={
-                  'https://logos.flamingtext.com/City-Logos/Bardin-Water-Logo.png'
-                }
-              />
-            }
-          ></Route>
-          <Route path="sign-up" element={<SignUp />}></Route>
-          <Route path="sign-up-admin" element={<SignUpAdmin />}></Route>
-          <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
-          <Route path="log-out" element={<LogOut socket={socket} />}></Route>
+        {!isLoggedIn && (
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  img={
+                    'https://logos.flamingtext.com/City-Logos/Bardin-Water-Logo.png'
+                  }
+                />
+              }
+            ></Route>
+            <Route path="sign-up" element={<SignUp />}></Route>
+            <Route path="sign-up-admin" element={<SignUpAdmin />}></Route>
+            <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
+            <Route path="log-out" element={<LogOut socket={socket} />}></Route>
 
-          <Route path="sign-in-admin" element={<SignInAdmin />}></Route>
+            <Route path="sign-in-admin" element={<SignInAdmin />}></Route>
 
-          <Route path="admin-page" element={<AdminPage />}></Route>
+            <Route path="admin-page" element={<AdminPage />}></Route>
 
-          <Route
-            path="/vip-req-list"
-            element={
-              <AdminPrivateRout>
-                <AdminNavBar />
-                <VipReqList />
-              </AdminPrivateRout>
-            }
-          ></Route>
+            <Route
+              path="/vip-req-list"
+              element={
+                <AdminPrivateRout>
+                  <AdminNavBar />
+                  <VipReqList />
+                </AdminPrivateRout>
+              }
+            ></Route>
 
-          <Route
-            path="/edit-users/:id"
-            element={
-              <AdminPrivateRout>
-                <AdminEditPage />
-              </AdminPrivateRout>
-            }
-          ></Route>
-          <Route
-            path="chat-room/:id"
-            element={
-              <PrivateRout>
-                <ChatPage socket={socket} />
-              </PrivateRout>
-            }
-          ></Route>
-          <Route
-            path="me/:id"
-            element={
-              <PrivateRout>
-                <YourProfile />
-              </PrivateRout>
-            }
-          ></Route>
-          <Route
-            path="delete/:id"
-            element={
-              <PrivateRout>
-                <DeleteProfile />
-              </PrivateRout>
-            }
-          ></Route>
-          <Route
-            path="favorites"
-            element={
-              <FavoritesPrivateRout>
-                <div className="users">
-                  <ShowUsers
-                    fn={removeFromFavoritesById}
-                    users={favoriteUsers}
-                    str={'bi bi-star-fill'}
-                    blockFn={showAlert}
-                  />
-                  {vipMessage && (
-                    <div className="vip-alert-div">
-                      <div className="vip-alert-message">{vipMessage}</div>
-                      <div className="vip-alert-btns-div">
-                        <button
-                          className="vip-alert-btn-return"
-                          onClick={() => setVipMessage('')}
-                        >
-                          {' '}
-                          Return
-                        </button>
-                        <Link
-                          style={{ textDecoration: 'none', color: 'black' }}
-                          to={'/vip-req-form'}
-                          className=" vip-alert-btn-get-vip "
-                        >
-                          {' '}
-                          Get vip
-                        </Link>
+            <Route
+              path="/edit-users/:id"
+              element={
+                <AdminPrivateRout>
+                  <AdminEditPage />
+                </AdminPrivateRout>
+              }
+            ></Route>
+            <Route
+              path="chat-room/:id"
+              element={
+                <PrivateRout>
+                  <ChatPage socket={socket} />
+                </PrivateRout>
+              }
+            ></Route>
+            <Route
+              path="me/:id"
+              element={
+                <PrivateRout>
+                  <YourProfile />
+                </PrivateRout>
+              }
+            ></Route>
+            <Route
+              path="delete/:id"
+              element={
+                <PrivateRout>
+                  <DeleteProfile />
+                </PrivateRout>
+              }
+            ></Route>
+            <Route
+              path="favorites"
+              element={
+                <FavoritesPrivateRout>
+                  <div className="users">
+                    <ShowUsers
+                      fn={removeFromFavoritesById}
+                      users={favoriteUsers}
+                      str={'bi bi-star-fill'}
+                      blockFn={showAlert}
+                    />
+                    {vipMessage && (
+                      <div className="vip-alert-div">
+                        <div className="vip-alert-message">{vipMessage}</div>
+                        <div className="vip-alert-btns-div">
+                          <button
+                            className="vip-alert-btn-return"
+                            onClick={() => setVipMessage('')}
+                          >
+                            {' '}
+                            Return
+                          </button>
+                          <Link
+                            style={{ textDecoration: 'none', color: 'black' }}
+                            to={'/vip-req-form'}
+                            className=" vip-alert-btn-get-vip "
+                          >
+                            {' '}
+                            Get vip
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </FavoritesPrivateRout>
-            }
-          ></Route>
-          <Route
-            path="blocked"
-            element={
-              <BlockedPrivateRout>
-                <div className="users">
-                  <ShowBlockedUsers />
-                </div>
-              </BlockedPrivateRout>
-            }
-          ></Route>
+                    )}
+                  </div>
+                </FavoritesPrivateRout>
+              }
+            ></Route>
+            <Route
+              path="blocked"
+              element={
+                <BlockedPrivateRout>
+                  <div className="users">
+                    <ShowBlockedUsers />
+                  </div>
+                </BlockedPrivateRout>
+              }
+            ></Route>
 
-          <Route
-            path="vip-req-form"
-            element={
-              <PrivateRout>
-                <VipReqForm />
-              </PrivateRout>
-            }
-          ></Route>
+            <Route
+              path="vip-req-form"
+              element={
+                <PrivateRout>
+                  <VipReqForm />
+                </PrivateRout>
+              }
+            ></Route>
 
-          <Route
-            path="thank-you"
-            element={
-              <PrivateRout>
-                <ThankYou />
-              </PrivateRout>
-            }
-          ></Route>
-        </Routes>
+            <Route
+              path="thank-you"
+              element={
+                <PrivateRout>
+                  <ThankYou />
+                </PrivateRout>
+              }
+            ></Route>
+          </Routes>
+        )}
       </div>
       <div className="space"></div>
-
       <div>
         <Footer />
       </div>
