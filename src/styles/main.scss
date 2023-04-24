@@ -16,6 +16,11 @@
   margin: auto;
   text-align: center;
 }
+.dark {
+  @extend .app;
+  background-color: black;
+  color: white;
+}
 .space {
   flex: 1;
 }

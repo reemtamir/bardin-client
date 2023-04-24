@@ -16,6 +16,7 @@ const VipReq = () => {
     setError,
     activeUser,
     setIsInMainPage,
+    isDark,
   } = useAuth();
   const navigate = useNavigate();
 
@@ -72,6 +73,7 @@ const VipReq = () => {
         {error && <div className="alert alert-danger">{error}</div>}
 
         <Link
+          style={{ color: isDark ? 'white' : 'black' }}
           className="my-card-link fs-3 "
           onClick={() => setIsInMainPage(true)}
           to={`/chat-room/${activeUser._id}`}

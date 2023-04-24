@@ -4,8 +4,14 @@ import AdminNavBar from './AdminNavBar';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 const AdminEditPage = () => {
-  const { getUsers, updateVip, vipUsers, setVipUsers, setIsInMainPage } =
-    useAuth();
+  const {
+    getUsers,
+    updateVip,
+    vipUsers,
+    setVipUsers,
+    setIsInMainPage,
+    isDark,
+  } = useAuth();
 
   const [users, setUsers] = useState([]);
   const { id } = useParams();
@@ -21,6 +27,7 @@ const AdminEditPage = () => {
     <>
       <AdminNavBar />
       <Link
+        style={{ color: isDark ? 'white' : 'black' }}
         className="my-card-link fs-3 "
         onClick={() => setIsInMainPage(true)}
         to={'/admin-page'}

@@ -38,6 +38,7 @@ const AuthContext = ({ children }) => {
   const [vipUsers, setVipUsers] = useState([]);
   const [vipReq, setVipReq] = useState([]);
   const [imageUrl, setImageUrl] = useState('');
+  const [isDark, setIsDark] = useState(false);
   useEffect(() => {
     const getVips = async () => {
       const { data } = await getVipReq();
@@ -265,7 +266,6 @@ const AuthContext = ({ children }) => {
           setUser,
           favoriteUsers,
           otherUsers,
-
           signUpAdmin,
           logInAdmin,
           admin,
@@ -287,6 +287,8 @@ const AuthContext = ({ children }) => {
           blockedUsers,
           imageUrl,
           setImageUrl,
+          isDark,
+          setIsDark,
         }}
       >
         {children}

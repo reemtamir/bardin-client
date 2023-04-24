@@ -43,8 +43,15 @@ import { Link } from 'react-router-dom';
 
 const socket = socketIO.connect('http://localhost:3001');
 function App() {
-  const { favoriteUsers, removeFromFavoritesById, isAdmin, user, admin } =
-    useAuth();
+  const {
+    favoriteUsers,
+    removeFromFavoritesById,
+    isAdmin,
+    user,
+    admin,
+    isDark,
+    setIsDark,
+  } = useAuth();
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [randomColor, setRandomeColor] = useState(getRandomeColor());
@@ -72,7 +79,7 @@ function App() {
           navigate('/log-out');
           setIsLoggedIn(false);
         }, 5000);
-      }, 60000);
+      }, 6000000);
     };
 
     const onActivity = () => {
@@ -96,20 +103,26 @@ function App() {
 
   return (
     <>
-      <header>{!isAdmin && <NavBar />}</header>
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <div className="app">
+      <div className={isDark ? 'dark' : 'app'}>
+        <i
+          className={isDark ? 'bi bi-lightbulb' : 'bi bi-lightbulb-fill'}
+          onClick={() => setIsDark((isDark) => !isDark)}
+        ></i>
+
+        <header>{!isAdmin && <NavBar />}</header>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+
         {(user || admin) && isLoggedIn && (
           <div className="disconnect-alert">
             <p style={{ color: randomColor }} className="disconnect-alert-p">
@@ -247,10 +260,10 @@ function App() {
             ></Route>
           </Routes>
         )}
-      </div>
-      <div className="space"></div>
-      <div>
-        <Footer />
+        <div className="space"></div>
+        <div>
+          <Footer />
+        </div>
       </div>
     </>
   );

@@ -12,11 +12,13 @@ const VipReqList = () => {
     setVipUsers,
     deleteVipReq,
     setIsInMainPage,
+    isDark,
   } = useAuth();
 
   return (
     <>
       <Link
+        style={{ color: isDark ? 'white' : 'black' }}
         className="my-card-link fs-3"
         onClick={() => setIsInMainPage(true)}
         to={'/admin-page'}
