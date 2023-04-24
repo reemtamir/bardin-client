@@ -79,7 +79,7 @@ function App() {
           navigate('/log-out');
           setIsLoggedIn(false);
         }, 5000);
-      }, 6000000);
+      }, 60000);
     };
 
     const onActivity = () => {
