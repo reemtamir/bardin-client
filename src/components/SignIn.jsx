@@ -94,7 +94,7 @@ const SignIn = () => {
             {' '}
             <Link to="/sign-up" className="link-to-sign-up">
               {' '}
-              sign up{' '}
+              Sign up{' '}
             </Link>
           </button>
         </div>

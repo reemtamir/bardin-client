@@ -34,8 +34,9 @@ import VipReqList from './components/VipReqList';
 import VipReqForm from './components/VipReqForm';
 import AdminNavBar from './components/AdminNavBar';
 import BlockedPrivateRout from './components/BlockedPrivateRout';
-import { ToastContainer } from 'react-toastify';
 import ShowBlockedUsers from './components/ShowBlockedUsers';
+import Information from './components/Information';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import { getRandomeColor } from './utils/randomColor';
@@ -143,6 +144,7 @@ function App() {
               }
             ></Route>
             <Route path="sign-up" element={<SignUp />}></Route>
+            <Route path="info" element={<Information />}></Route>
             <Route path="sign-up-admin" element={<SignUpAdmin />}></Route>
             <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
             <Route path="log-out" element={<LogOut socket={socket} />}></Route>
