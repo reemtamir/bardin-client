@@ -42,7 +42,11 @@ const ShowUsers = ({ users, str, fn, blockFn }) => {
             ></i>
 
             <div className="min-height">
-              <img src={element.image} alt={`${element.name} `} />
+              <img
+                src={element.image}
+                alt={`${element.name} `}
+                title={`${element.name} `}
+              />
             </div>
 
             <div className="card-body">

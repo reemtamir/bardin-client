@@ -62,7 +62,11 @@ const AdminEditPage = () => {
               {/* vip true <input type="checkbox" name="true" id="true" />
               vip false <input type="checkbox" name="false" id="false" /> */}
               <div className="min-height">
-                <img src={element.image} alt={`${element.name} `} />
+                <img
+                  src={element.image}
+                  alt={`${element.name} `}
+                  title={`${element.name} `}
+                />
               </div>
               <div className="card-body ">
                 <ul className="ul ">

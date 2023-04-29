@@ -10,7 +10,11 @@ const UserProfileDisplay = () => {
     <>
       <div className="user-container ">
         <div className="min-height">
-          <img src={activeUser.image} alt={`${activeUser.name} `} />
+          <img
+            src={activeUser.image}
+            title={`${activeUser.name} `}
+            alt={`${activeUser.name} `}
+          />
         </div>
 
         <div className="my-card-body">

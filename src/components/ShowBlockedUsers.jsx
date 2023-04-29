@@ -20,6 +20,7 @@ const ShowBlockedUsers = () => {
               className="block-img"
               src={element.image}
               alt={`${element.name} `}
+              title={`${element.name} `}
             />
             <p
               onClick={() => {
