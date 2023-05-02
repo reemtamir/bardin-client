@@ -62,7 +62,8 @@ function App() {
   const [userHomePage, setUserHomePage] = useState([
     'Welcome to Bardin app',
     'In this app you can communicate and find new people',
-    `  You will be able to  sign in after registration and edit your account. you won't be able to see all users. That you can do when you become VIP member.
+    `  You will be able to  sign in after registration and edit your account. When adding your account, you MUST fill the password and confirmed password fields.
+     you won't be able to see all users. That you can do when you become VIP member.
 `,
     ` As a VIP member, you also can search for users, add  users to your favorites list or block them. 
  Send a VIP req and wait until
