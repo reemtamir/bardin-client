@@ -12,12 +12,10 @@ const MainRoom = () => {
     favoriteUsers,
     otherUsers,
     user,
+    showAlert,
+    vipMessage,
+    setVipMessage,
   } = useAuth();
-  const [vipMessage, setVipMessage] = useState('');
-
-  const showAlert = () => {
-    setVipMessage('Only for VIP members');
-  };
 
   return (
     <>

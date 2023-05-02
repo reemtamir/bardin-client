@@ -32,12 +32,14 @@ const AuthContext = ({ children }) => {
   const [favoriteUsers, setFavoriteUsers] = useState([]);
   const [otherUsers, setOtherUsers] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
+  const [usersWhoDidNotBlockedMe, setUsersWhoDidNotBlockedMe] = useState([]);
   const [isAdmin, setIsAdmin] = useState('');
   const [isInMainPage, setIsInMainPage] = useState(true);
   const [error, setError] = useState('');
   const [vipUsers, setVipUsers] = useState([]);
   const [vipReq, setVipReq] = useState([]);
   const [imageUrl, setImageUrl] = useState('');
+  const [vipMessage, setVipMessage] = useState('');
   const [isDark, setIsDark] = useState(false);
   useEffect(() => {
     const getVips = async () => {
@@ -75,7 +77,7 @@ const AuthContext = ({ children }) => {
     const getNonBlockUsers = async (id) => {
       try {
         const notBlockedUsers = await getUsersWhoDidNotBlockedMe(id);
-
+        setUsersWhoDidNotBlockedMe(notBlockedUsers);
         const notBlockedUserIds = []; // Array of not blocked users's ids
 
         // Push each not-blocked user id to notBlockedUserIds
@@ -246,7 +248,12 @@ const AuthContext = ({ children }) => {
     setActiveUser(null);
     setOtherUsers([]);
     setError('');
+    setVipMessage('');
   }
+
+  const showAlert = () => {
+    setVipMessage('Only for VIP members');
+  };
 
   return (
     <>
@@ -289,6 +296,10 @@ const AuthContext = ({ children }) => {
           setImageUrl,
           isDark,
           setIsDark,
+          usersWhoDidNotBlockedMe,
+          showAlert,
+          vipMessage,
+          setVipMessage,
         }}
       >
         {children}

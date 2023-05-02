@@ -36,6 +36,7 @@ import AdminNavBar from './components/AdminNavBar';
 import BlockedPrivateRout from './components/BlockedPrivateRout';
 import ShowBlockedUsers from './components/ShowBlockedUsers';
 import Information from './components/Information';
+import Search from './components/Search';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
@@ -80,7 +81,7 @@ function App() {
           navigate('/log-out');
           setIsLoggedIn(false);
         }, 5000);
-      }, 60000);
+      }, 10000000);
     };
 
     const onActivity = () => {
@@ -176,6 +177,14 @@ function App() {
               element={
                 <PrivateRout>
                   <ChatPage socket={socket} />
+                </PrivateRout>
+              }
+            ></Route>
+            <Route
+              path="search/:id"
+              element={
+                <PrivateRout>
+                  <Search />
                 </PrivateRout>
               }
             ></Route>

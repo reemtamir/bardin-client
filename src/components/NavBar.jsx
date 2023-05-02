@@ -60,6 +60,17 @@ const NavBar = () => {
                       Main room
                     </Link>
                   </li>
+                  {user?.vip && (
+                    <li className="nav-item ">
+                      <Link
+                        to={`/search/${user._id}`}
+                        className="nav-link active"
+                        aria-current="page"
+                      >
+                        Search
+                      </Link>
+                    </li>
+                  )}
                 </>
               )}
 

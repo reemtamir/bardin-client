@@ -134,3 +134,9 @@ li {
     }
   }
 }
+.fav {
+  @extend .users;
+  display: flex;
+
+  width: 100%;
+}

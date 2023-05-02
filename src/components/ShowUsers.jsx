@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const ShowUsers = ({ users, str, fn, blockFn }) => {
   const { user, blockUserById } = useAuth();
   const [blockedUser, setBlockedUser] = useState(null);
+  const navigate = useNavigate();
 
   if (!users) return;
 
@@ -37,6 +38,7 @@ const ShowUsers = ({ users, str, fn, blockFn }) => {
               onClick={async () => {
                 const data = await fn(user.email, element._id);
 
+                navigate(`/chat-room/${user._id}`);
                 return data;
               }}
             ></i>
