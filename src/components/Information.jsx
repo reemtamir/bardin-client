@@ -1,25 +1,24 @@
 import React from 'react';
+import AdminNavBar from './AdminNavBar';
+import { useAuth } from '../hooks/useAuth';
 
-const Information = () => {
+const Information = ({ text }) => {
+  const { isAdmin } = useAuth();
+  const [h1, p1, p2, p3, h2] = text;
   return (
-    <div>
-      <h1>Welcome to Bardin app</h1>
+    <>
+      {isAdmin && <AdminNavBar />}
+      <div className="info-div">
+        <h1 className="info-h1">{h1}</h1>
 
-      <p>In this app you can communicate and find new people</p>
-      <p>
-        You will be able to sign up and sign in, edit your account, see who's
-        online, be a part of a main chat and send private messages to other
-        users
-      </p>
+        <p className="info-p">{p1}</p>
+        <p className="info-p">{p2}</p>
 
-      <p>
-        You also can add othet users to your favorites list or block them. That
-        you can do only if you'r a VIP members. Send a VIP req and wait until
-        Admin will approve it.
-      </p>
+        <p className="info-p">{p3}</p>
 
-      <h2>Good luck and enjoy</h2>
-    </div>
+        <h2 className="info-h2">{h2}</h2>
+      </div>
+    </>
   );
 };
 

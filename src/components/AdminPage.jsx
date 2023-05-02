@@ -24,6 +24,8 @@ const AdminPage = () => {
           img={
             'https://thumbs.dreamstime.com/b/admin-sign-laptop-icon-stock-vector-166205404.jpg'
           }
+          linkLetsGoStr={'/sign-in-admin'}
+          linkToInfo={'/admin-info'}
         />
       )}
       {admin && (

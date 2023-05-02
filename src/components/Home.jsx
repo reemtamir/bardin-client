@@ -1,15 +1,16 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { Link } from 'react-router-dom';
-const Home = ({ img }) => {
-  const { user } = useAuth();
+import AdminNavBar from './AdminNavBar';
+const Home = ({ img, linkLetsGoStr, linkToInfo }) => {
+  const { activeUser, setIsAdmin, isAdmin } = useAuth();
   return (
     <div className="container">
       <img style={{ width: '50vw' }} src={img} alt="logo" />
       <button type="submit" className="sign-up-btn">
         {' '}
         <Link
-          to={user ? `/chat-room/${user._id}` : '/sign-in'}
+          to={activeUser ? `/chat-room/${activeUser._id}` : linkLetsGoStr}
           className="link-to-sign-up"
         >
           {' '}
@@ -18,11 +19,26 @@ const Home = ({ img }) => {
       </button>
       <button type="submit" className="sign-up-btn">
         {' '}
-        <Link to="/info" className="link-to-sign-up">
+        <Link to={linkToInfo} className="link-to-sign-up">
           {' '}
           Information{' '}
         </Link>
       </button>
+      {!isAdmin && (
+        <button
+          type="submit"
+          className="sign-up-btn"
+          onClick={() => setIsAdmin(true)}
+        >
+          <Link
+            to={'/admin-page'}
+            className="nav-link active"
+            aria-current="page"
+          >
+            Admin
+          </Link>
+        </button>
+      )}
     </div>
   );
 };

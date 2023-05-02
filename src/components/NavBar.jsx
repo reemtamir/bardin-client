@@ -33,22 +33,7 @@ const NavBar = () => {
                   Home
                 </Link>
               </li>
-              {!user && (
-                <li
-                  onClick={() => {
-                    setIsAdmin(true);
-                  }}
-                  className="nav-item ms-2"
-                >
-                  <Link
-                    to={'/admin-page'}
-                    className="nav-link active"
-                    aria-current="page"
-                  >
-                    Admin
-                  </Link>
-                </li>
-              )}
+
               {user && (
                 <>
                   <li className="nav-item ">

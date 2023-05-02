@@ -8,6 +8,7 @@ import '../src/styles/footer.scss';
 import '../src/styles/vip-req-list.scss';
 import '../src/styles/admin-page.scss';
 import '../src/styles/blocked.scss';
+import '../src/styles/info.scss';
 
 import socketIO from 'socket.io-client';
 import { Route, Routes, useNavigate } from 'react-router-dom';
@@ -58,6 +59,28 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [randomColor, setRandomeColor] = useState(getRandomeColor());
   const [vipMessage, setVipMessage] = useState('');
+  const [userHomePage, setUserHomePage] = useState([
+    'Welcome to Bardin app',
+    'In this app you can communicate and find new people',
+    `  You will be able to sign up and sign in, edit your account, see who's
+online, be a part of a main chat and send private messages to other
+users`,
+    ` You also can add othet users to your favorites list or block them. That
+you can do only if you'r a VIP members. Send a VIP req and wait until
+Admin will approve it.`,
+    `Good luck and enjoy`,
+  ]);
+
+  const [adminHomePage, setAdminHomePage] = useState([
+    'Welcome to Bardin app admin',
+    'adminple',
+    `   admin
+users`,
+    ` admin
+it until
+Admin will approve it.`,
+    `Goodadminjoy`,
+  ]);
 
   const showAlert = () => {
     setVipMessage('Only for VIP members');
@@ -141,11 +164,20 @@ function App() {
                   img={
                     'https://logos.flamingtext.com/City-Logos/Bardin-Water-Logo.png'
                   }
+                  linkLetsGoStr={'/sign-in'}
+                  linkToInfo={'/user-info'}
                 />
               }
             ></Route>
             <Route path="sign-up" element={<SignUp />}></Route>
-            <Route path="info" element={<Information />}></Route>
+            <Route
+              path="user-info"
+              element={<Information text={[...userHomePage]} />}
+            ></Route>
+            <Route
+              path="admin-info"
+              element={<Information text={[...adminHomePage]} />}
+            ></Route>
             <Route path="sign-up-admin" element={<SignUpAdmin />}></Route>
             <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
             <Route path="log-out" element={<LogOut socket={socket} />}></Route>
