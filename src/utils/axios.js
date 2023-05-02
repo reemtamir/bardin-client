@@ -7,7 +7,6 @@ setTokenHeader();
 
 ///USER
 export const signUp = async (values) => {
-  console.log(values);
   return await axios.post('/users', {
     ...values,
   });

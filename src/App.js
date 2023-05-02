@@ -62,24 +62,19 @@ function App() {
   const [userHomePage, setUserHomePage] = useState([
     'Welcome to Bardin app',
     'In this app you can communicate and find new people',
-    `  You will be able to sign up and sign in, edit your account, see who's
-online, be a part of a main chat and send private messages to other
-users`,
-    ` You also can add othet users to your favorites list or block them. That
-you can do only if you'r a VIP members. Send a VIP req and wait until
+    `  You will be able to  sign in after registration and edit your account. you won't be able to see all users. That you can do when you become VIP member.
+`,
+    ` As a VIP member, you also can search for users, add  users to your favorites list or block them. 
+ Send a VIP req and wait until
 Admin will approve it.`,
     `Good luck and enjoy`,
   ]);
 
   const [adminHomePage, setAdminHomePage] = useState([
-    'Welcome to Bardin app admin',
-    'adminple',
-    `   admin
-users`,
-    ` admin
-it until
-Admin will approve it.`,
-    `Goodadminjoy`,
+    'Welcome Admin',
+    'As admin u can sign-in after registration, see all users, see VIP req, delete them and update users VIP value',
+
+    `Good luck and enjoy`,
   ]);
 
   const showAlert = () => {
@@ -172,11 +167,18 @@ Admin will approve it.`,
             <Route path="sign-up" element={<SignUp />}></Route>
             <Route
               path="user-info"
-              element={<Information text={[...userHomePage]} />}
+              element={
+                <Information text={[...userHomePage]} linkStr={'/sign-in'} />
+              }
             ></Route>
             <Route
               path="admin-info"
-              element={<Information text={[...adminHomePage]} />}
+              element={
+                <Information
+                  text={[...adminHomePage]}
+                  linkStr={'/sign-in-admin'}
+                />
+              }
             ></Route>
             <Route path="sign-up-admin" element={<SignUpAdmin />}></Route>
             <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
