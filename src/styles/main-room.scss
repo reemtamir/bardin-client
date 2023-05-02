@@ -140,3 +140,15 @@ li {
 
   width: 100%;
 }
+.on-line,
+.off-line {
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 50%;
+  margin: 0.5em 8em;
+  background-color: #71fd9b;
+}
+.off-line {
+  background-color: gray;
+}

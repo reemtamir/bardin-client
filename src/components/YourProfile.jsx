@@ -25,8 +25,17 @@ const YourProfile = () => {
     if (!activeUser) return;
     setActiveUser(activeUser);
 
-    const { age, _id, vip, createdAt, __v, favorites, blockList, ...rest } =
-      activeUser;
+    const {
+      age,
+      _id,
+      vip,
+      createdAt,
+      __v,
+      favorites,
+      blockList,
+      isOnline,
+      ...rest
+    } = activeUser;
     form.setValues({
       ...rest,
     });

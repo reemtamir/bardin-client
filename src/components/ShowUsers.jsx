@@ -14,6 +14,10 @@ const ShowUsers = ({ users, str, fn, blockFn }) => {
       {users.map((element, index) => {
         return (
           <div key={index} className="users-container">
+            <span className={`${element.isOnline ? 'on-line' : 'off-line'} `}>
+              .
+            </span>
+
             {user.vip ? (
               <i
                 className={`bi bi-dash-circle-fill`}
