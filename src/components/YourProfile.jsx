@@ -57,9 +57,7 @@ const YourProfile = () => {
         .string()
         .min(3)
         .max(255)
-        .regex(
-          /^[A-Za-z]+[0-9]*$/
-        )
+        .regex(/^[A-Za-z\u0590-\u05FF]+[0-9]*$/)
 
         .required(),
       email: joi
