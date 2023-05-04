@@ -41,7 +41,7 @@ import Search from './components/Search';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
-import { getRandomeColor } from './utils/randomColor';
+import { getRandomColor } from './utils/randomColor';
 import { Link } from 'react-router-dom';
 
 const socket = socketIO.connect('http://localhost:3001');
@@ -57,9 +57,9 @@ function App() {
   } = useAuth();
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [randomColor, setRandomeColor] = useState(getRandomeColor());
+  const [randomColor, setRandomColor] = useState(getRandomColor());
   const [vipMessage, setVipMessage] = useState('');
-  const [userHomePage, setUserHomePage] = useState([
+  const userHomePage = [
     'Welcome to Bardin app',
     'In this app you can communicate and find new people',
     `  You will be able to  sign in after registration, see who's online and edit your account. When edit your account, you MUST fill the password and confirmed password fields.
@@ -69,14 +69,14 @@ function App() {
  Send a VIP req and wait until
 Admin will approve it.`,
     `Good luck and enjoy`,
-  ]);
+  ];
 
-  const [adminHomePage, setAdminHomePage] = useState([
+  const adminHomePage = [
     'Welcome Admin',
     'As admin u can sign-in after registration, see all users, see VIP req, delete them and update users VIP value',
 
     `Good luck and enjoy`,
-  ]);
+  ];
 
   const showAlert = () => {
     setVipMessage('Only for VIP members');
@@ -85,16 +85,16 @@ Admin will approve it.`,
   useEffect(() => {
     let logInTimeOutId;
     let alertTimeOut;
-    let randomeColorInterval;
+    let randomColorInterval;
     const resetTimeout = () => {
       clearTimeout(logInTimeOutId);
       clearTimeout(alertTimeOut);
-      clearInterval(randomeColorInterval);
+      clearInterval(randomColorInterval);
 
       alertTimeOut = setTimeout(() => {
         setIsLoggedIn(true);
-        randomeColorInterval = setInterval(() => {
-          setRandomeColor(getRandomeColor());
+        randomColorInterval = setInterval(() => {
+          setRandomColor(getRandomColor());
         }, 500);
         logInTimeOutId = setTimeout(() => {
           navigate('/log-out');
@@ -106,7 +106,7 @@ Admin will approve it.`,
     const onActivity = () => {
       resetTimeout();
       setIsLoggedIn(false);
-      clearInterval(randomeColorInterval);
+      clearInterval(randomColorInterval);
     };
 
     document.addEventListener('mousemove', onActivity);
