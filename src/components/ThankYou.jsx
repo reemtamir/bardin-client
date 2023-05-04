@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 const ThankYou = () => {
-  const { user } = useAuth();
+  const { user, setVipMessage } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
+    setVipMessage('');
     setTimeout(() => {
       navigate(`/chat-room/${user._id}`);
     }, 3000);

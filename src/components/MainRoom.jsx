@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import ShowUsers from './ShowUsers';
@@ -16,7 +16,9 @@ const MainRoom = () => {
     vipMessage,
     setVipMessage,
   } = useAuth();
-
+  useEffect(() => {
+    setVipMessage('');
+  }, []);
   return (
     <>
       <div className="my-profile">
