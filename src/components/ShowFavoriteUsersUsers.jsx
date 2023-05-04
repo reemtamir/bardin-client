@@ -11,9 +11,9 @@ const ShowFavoriteUsersUsers = ({ str, fn, blockFn }) => {
       {favoriteUsers.map((element, index) => {
         return (
           <div key={index} className="users-container">
-            <span
-              className={`${element.isOnline ? 'on-line' : 'off-line'} `}
-            ></span>
+            <span className={`${element.isOnline ? 'on-line' : 'off-line'} `}>
+              .
+            </span>
             {user.vip ? (
               <i
                 className={`bi bi-dash-circle-fill`}
