@@ -23,3 +23,22 @@
   background-color: white;
   color: blue;
 }
+.btn-see-blocked {
+  color: white;
+  background-color: rgb(160, 69, 69);
+  border: none;
+  margin-top: 1rem;
+}
+.admin-block-list-div {
+  width: 100%;
+  display: flex;
+
+  gap: 0.5em;
+}
+.admin-block-list-p {
+  font-size: 1.5rem;
+  text-transform: capitalize;
+}
+.admin-block-list-image {
+  width: 50px;
+}

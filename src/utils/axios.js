@@ -18,6 +18,7 @@ export const getUsers = async () => {
   const { data } = await axios.get('/users');
   return data;
 };
+
 export const getUsersWhoDidNotBlockedMe = async (id) => {
   const { data } = await axios.get(`/users/${id}`);
 
@@ -68,7 +69,10 @@ export function getUser() {
 }
 
 export const createVipReq = async (details) => {
-  return axios.post('/users/vip', details);
+  return await axios.post('/users/vip', details);
+};
+export const updateOnlineStatus = async (email) => {
+  return await axios.put('/me/update-online', { email });
 };
 
 ////ADMIN

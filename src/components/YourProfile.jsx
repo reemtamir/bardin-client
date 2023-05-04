@@ -7,6 +7,7 @@ import Input from './Input';
 import joi from 'joi';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import NavBar from './NavBar';
 
 const YourProfile = () => {
   const {
@@ -87,7 +88,7 @@ const YourProfile = () => {
       try {
         const { data } = await updateUser(user._id, {
           ...body,
-          image: imageUrl,
+          image: imageUrl ? imageUrl : image,
         });
 
         setActiveUser(data);

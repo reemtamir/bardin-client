@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import ShowUsers from './ShowUsers';
 import ShowFavoriteUsersUsers from './ShowFavoriteUsersUsers';
 import UserProfileDisplay from './UserProfileDisplay';
+import NavBar from './NavBar';
 
 const MainRoom = () => {
   const {

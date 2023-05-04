@@ -22,7 +22,9 @@ import {
   blockUser,
   unblockUser,
   getUsersWhoDidNotBlockedMe,
+  updateOnlineStatus,
 } from '../utils/axios';
+import { wait } from '@testing-library/user-event/dist/utils';
 
 export const context = createContext(null);
 const AuthContext = ({ children }) => {
@@ -148,10 +150,10 @@ const AuthContext = ({ children }) => {
   function refreshAdmin() {
     setAdmin(getUser());
   }
-  useEffect(() => {
-    setAdmin('');
-    refreshUser();
-  }, []);
+  // useEffect(() => {
+  //   setAdmin('');
+  //   refreshUser();
+  // }, []);
 
   async function logIn(values, user) {
     try {
@@ -159,6 +161,7 @@ const AuthContext = ({ children }) => {
       if (!data) return;
       localStorage.setItem('token', data);
       setTokenHeader();
+
       setUser(getUser());
 
       toast(`welcome ${getUser().name}!`);
@@ -171,18 +174,17 @@ const AuthContext = ({ children }) => {
   async function logInAdmin(values) {
     try {
       const { data } = await signInAdmin(values);
+
       localStorage.setItem('token', data);
-      refreshAdmin();
+      setAdmin(getUser());
       setTokenHeader();
+
       toast(`welcome ${getUser().name}!`);
-      return admin;
     } catch ({ response }) {
       setError(response.data);
     }
-
-    return admin;
   }
-
+  useEffect(() => {}, [admin]);
   async function blockUserById(email, id) {
     const { data } = await blockUser(id, email);
 
@@ -238,10 +240,19 @@ const AuthContext = ({ children }) => {
     return data;
   }
 
-  function logOut() {
+  async function logOut() {
     localStorage.removeItem('token');
-    if (user) refreshUser();
-    if (admin) refreshAdmin();
+    if (user) {
+      {
+        await updateOnlineStatus(user.email);
+        refreshUser();
+      }
+    }
+    if (admin) {
+      await updateOnlineStatus(admin.email);
+
+      refreshAdmin();
+    }
     setIsAdmin(false);
     setFavoriteUsers([]);
     setBlockedUsers([]);
@@ -249,6 +260,7 @@ const AuthContext = ({ children }) => {
     setOtherUsers([]);
     setError('');
     setVipMessage('');
+    setUsersWhoDidNotBlockedMe([]);
   }
 
   const showAlert = () => {
@@ -300,6 +312,8 @@ const AuthContext = ({ children }) => {
           showAlert,
           vipMessage,
           setVipMessage,
+
+          getFavorites,
         }}
       >
         {children}

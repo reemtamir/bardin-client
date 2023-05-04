@@ -6,7 +6,6 @@ const Home = ({ img, linkLetsGoStr, linkToInfo }) => {
   const { activeUser, setIsAdmin, isAdmin } = useAuth();
   return (
     <div className="container">
-      <img style={{ width: '50vw' }} src={img} alt="logo" />
       <button type="submit" className="sign-up-btn">
         {' '}
         <Link
@@ -39,6 +38,7 @@ const Home = ({ img, linkLetsGoStr, linkToInfo }) => {
           </Link>
         </button>
       )}
+      <img style={{ width: '20rem' }} src={img} alt="logo" />
     </div>
   );
 };
