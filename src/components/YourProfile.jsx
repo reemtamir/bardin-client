@@ -58,7 +58,7 @@ const YourProfile = () => {
         .min(3)
         .max(255)
         .regex(
-          /^[\u0590-\u05fe\u0621-\u064aA-Za-z]+(([',. -][\u0590-\u05fe\u0621-\u064aA-Za-z ])?[\u0590-\u05fe\u0621-\u064aA-Za-z]*)*$/
+          /^[A-Za-z]+[0-9]*$/
         )
 
         .required(),
