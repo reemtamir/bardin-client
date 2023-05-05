@@ -79,15 +79,18 @@ const AdminEditPage = () => {
                           className="btn-see-blocked"
                           type="button"
                           data-bs-toggle="collapse"
-                          data-bs-target="#collapseBlocked"
+                          data-bs-target={`#collapseBlocked${element._id}`}
                           aria-expanded="false"
-                          aria-controls="collapseBlocked"
+                          aria-controls={`collapseBlocked${element._id}`}
                         >
                           See blocked list
                         </button>
 
-                        <div className="collapse" id="collapseBlocked">
-                          <ul className="list-group">
+                        <div
+                          className="collapse "
+                          id={`collapseBlocked${element._id}`}
+                        >
+                          <ul>
                             {element.blockList.map((blocked, index) => (
                               <li key={index}>
                                 {' '}
@@ -95,6 +98,7 @@ const AdminEditPage = () => {
                                   <p className="admin-block-list-p">
                                     {blocked.name}
                                   </p>
+
                                   <img
                                     className="admin-block-list-image"
                                     src={blocked.image}
