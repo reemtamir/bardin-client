@@ -73,7 +73,7 @@ Admin will approve it.`,
 
   const adminHomePage = [
     'Welcome Admin',
-    'As admin u can sign-in after registration, see all users, see VIP req, delete them and update users VIP value',
+    'As admin u can sign-in after registration, see all users, see the users blocked list,  get VIP req,  delete them and update users VIP value',
 
     `Good luck and enjoy`,
   ];

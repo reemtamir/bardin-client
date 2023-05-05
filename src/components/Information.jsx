@@ -18,7 +18,7 @@ const Information = ({ text, linkStr }) => {
         <p className="info-p">{p3}</p>
 
         <h2 className="info-h2">{h2}</h2>
-        <button type="submit" className="sign-up-btn">
+        <button type="submit" className="sign-in-btn">
           {' '}
           <Link to={linkStr} className="link-to-sign-up">
             {' '}

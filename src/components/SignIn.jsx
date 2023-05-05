@@ -85,8 +85,6 @@ const SignIn = () => {
           <button type="submit" className="sign-in-btn">
             Sign in
           </button>
-
-          <Link to={'#'}>Forgot your password?</Link>
         </div>
         <div className="container">
           <h2 className="header">Don't have an account? </h2>

@@ -8,3 +8,19 @@
   align-self: center;
   margin: 9em auto;
 }
+
+.btns-div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  & > .user-btns-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  & > .admin-btn {
+  }
+}

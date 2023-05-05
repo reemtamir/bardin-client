@@ -6,6 +6,7 @@ import joi from 'joi';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
 import AdminNavBar from './AdminNavBar';
+import { Link } from 'react-router-dom';
 
 const SignInAdmin = () => {
   const { admin, setAdmin, logInAdmin, error, setError } = useAuth();
@@ -89,6 +90,16 @@ const SignInAdmin = () => {
 
           <button type="submit" className="sign-in-btn">
             Sign in
+          </button>
+        </div>
+        <div className="container">
+          <h2 className="header">Don't have an account? </h2>
+          <button type="submit" className="sign-up-btn">
+            {' '}
+            <Link to={'/sign-up-admin'} className="link-to-sign-up">
+              {' '}
+              Sign up{' '}
+            </Link>
           </button>
         </div>
       </form>
