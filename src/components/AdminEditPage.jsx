@@ -70,7 +70,7 @@ const AdminEditPage = () => {
               </div>
               <div className="card-body ">
                 <ul className="ul ">
-                  <li className="fs-6 mt-1">{element.name}</li>
+                  <li className="fs-6 mt-1 name-li">{element.name}</li>
                   <li className="fs-6 ">{element.email}</li>
                   <li className="fs-6 ">
                     {element.blockList.length ? (

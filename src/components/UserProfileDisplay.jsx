@@ -18,8 +18,8 @@ const UserProfileDisplay = () => {
         </div>
 
         <div className="my-card-body">
-          <ul className="my-ul">
-            <li className="text-light">{activeUser.name}</li>
+          <ul className="my-ul ul">
+            <li className="text-light name-li">{activeUser.name}</li>
           </ul>
         </div>
         <Link className="my-card-link" to={`/me/${user._id}`}>

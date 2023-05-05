@@ -57,7 +57,7 @@ const ShowUsers = ({ users, str, fn, blockFn }) => {
 
             <div className="card-body">
               <ul className="ul">
-                <li>
+                <li className=" name-li">
                   {element.name}, {element.age}
                 </li>
               </ul>

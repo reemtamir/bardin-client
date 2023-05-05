@@ -24,6 +24,9 @@
 .ul {
   text-align: center;
   padding-left: 0;
+  & > .name-li {
+    text-transform: capitalize;
+  }
 }
 li {
   list-style: none;

@@ -13,7 +13,7 @@ const ShowBlockedUsers = () => {
           <div key={index} className="blocked-container">
             <div className="blocked-card-body">
               <ul className="ul">
-                <li>{element.name}</li>
+                <li className="name-li">{element.name}</li>
               </ul>
             </div>
             <img
