@@ -68,7 +68,7 @@ function App() {
     ` As a VIP member, you also can search for users, add  users to your favorites list or block them. 
  Send a VIP req and wait until
 Admin will approve it.`,
-    `Good luck and enjoy`,
+    `Good luck and enjoy----> please ignore the parts with the commented code of the chat. this code is still in progress`,
   ];
 
   const adminHomePage = [
@@ -91,16 +91,21 @@ Admin will approve it.`,
       clearTimeout(alertTimeOut);
       clearInterval(randomColorInterval);
 
-      alertTimeOut = setTimeout(() => {
-        setIsLoggedIn(true);
-        randomColorInterval = setInterval(() => {
-          setRandomColor(getRandomColor());
-        }, 500);
-        logInTimeOutId = setTimeout(() => {
-          navigate('/log-out');
-          setIsLoggedIn(false);
-        }, 5000);
-      }, 10000000);
+      alertTimeOut = setTimeout(
+        () => {
+          setIsLoggedIn(true);
+          randomColorInterval = setInterval(() => {
+            setRandomColor(getRandomColor());
+          }, 500);
+          logInTimeOutId = setTimeout(() => {
+            navigate('/log-out');
+            setIsLoggedIn(false);
+          }, 5000);
+        },
+        14,
+        400,
+        000
+      );
     };
 
     const onActivity = () => {
