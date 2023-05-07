@@ -91,21 +91,16 @@ Admin will approve it.`,
       clearTimeout(alertTimeOut);
       clearInterval(randomColorInterval);
 
-      alertTimeOut = setTimeout(
-        () => {
-          setIsLoggedIn(true);
-          randomColorInterval = setInterval(() => {
-            setRandomColor(getRandomColor());
-          }, 500);
-          logInTimeOutId = setTimeout(() => {
-            navigate('/log-out');
-            setIsLoggedIn(false);
-          }, 5000);
-        },
-        14,
-        400,
-        000
-      );
+      alertTimeOut = setTimeout(() => {
+        setIsLoggedIn(true);
+        randomColorInterval = setInterval(() => {
+          setRandomColor(getRandomColor());
+        }, 500);
+        logInTimeOutId = setTimeout(() => {
+          navigate('/log-out');
+          setIsLoggedIn(false);
+        }, 5000);
+      }, 14400000);
     };
 
     const onActivity = () => {
