@@ -44,7 +44,7 @@ import { useEffect, useState } from 'react';
 import { getRandomColor } from './utils/randomColor';
 import { Link } from 'react-router-dom';
 
-const socket = socketIO.connect('http://localhost:3001');
+const socket = socketIO.connect('http://localhost:3002');
 function App() {
   const {
     favoriteUsers,

@@ -35,6 +35,7 @@ const YourProfile = () => {
       favorites,
       blockList,
       isOnline,
+      socketId,
       ...rest
     } = activeUser;
     form.setValues({

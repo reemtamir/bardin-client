@@ -51,6 +51,7 @@ export async function unblockUser(id, email) {
   return await axios.post(`/me/remove-block/${id}`, { email });
 }
 export async function updateUser(id, user) {
+
   return await axios.put(`/me/edit/${id}`, user);
 }
 export async function deleteUser(id) {
