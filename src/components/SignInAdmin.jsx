@@ -32,6 +32,8 @@ const SignInAdmin = () => {
     async onSubmit(values) {
       try {
         const { data } = await logInAdmin(values);
+
+        console.log(data, 'data');
         await setAdmin(data);
 
         navigate('/admin-page');

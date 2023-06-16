@@ -30,7 +30,7 @@ export const signUpAdmin = async (values) => {
 };
 
 export const signInAdmin = async (values) => {
-  return await axios.post(`/admin/sign-in`, values);
+  return await axios.post(`/auth/sign-in`, values);
 };
 
 export function getJwt() {
