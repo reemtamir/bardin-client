@@ -1,48 +1,39 @@
 import React, { useEffect } from 'react';
 import { createContext, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useAuth } from '../hooks/useAuth';
+
 import {
-  getUser,
-  signIn,
-  signUp,
   getUsers,
   myProfile,
   updateUser,
   addToFavorites,
   removeFromFavorites,
-  signUpAdmin,
-  signInAdmin,
-  updateVip,
   getFavorites,
   getBlocked,
   createVipReq,
   getVipReq,
   deleteVipReq,
-  setTokenHeader,
   blockUser,
   unblockUser,
   getUsersWhoDidNotBlockedMe,
-  updateOnlineStatus,
-} from '../utils/axios';
-import { wait } from '@testing-library/user-event/dist/utils';
+  updateVip,
+} from '../utils/axiosApp';
 
 export const context = createContext(null);
-const AuthContext = ({ children }) => {
-  const [user, setUser] = useState(getUser());
-  const [activeUser, setActiveUser] = useState(user);
-  const [admin, setAdmin] = useState(getUser());
+
+const AppContext = ({ children }) => {
+  const { user, setActiveUser } = useAuth();
   const [favoriteUsers, setFavoriteUsers] = useState([]);
   const [otherUsers, setOtherUsers] = useState([]);
   const [blockedUsers, setBlockedUsers] = useState([]);
   const [usersWhoDidNotBlockedMe, setUsersWhoDidNotBlockedMe] = useState([]);
-  const [isAdmin, setIsAdmin] = useState('');
   const [isInMainPage, setIsInMainPage] = useState(true);
-  const [error, setError] = useState('');
   const [vipUsers, setVipUsers] = useState([]);
   const [vipReq, setVipReq] = useState([]);
   const [imageUrl, setImageUrl] = useState('');
   const [vipMessage, setVipMessage] = useState('');
   const [isDark, setIsDark] = useState(false);
+  
   useEffect(() => {
     const getVips = async () => {
       const { data } = await getVipReq();
@@ -51,9 +42,6 @@ const AuthContext = ({ children }) => {
     getVips();
   }, [vipUsers]);
 
-  useEffect(() => {
-    setIsAdmin(admin);
-  }, [admin]);
   useEffect(() => {
     if (!user) return;
     const getAllFavorites = async (user) => {
@@ -134,6 +122,7 @@ const AuthContext = ({ children }) => {
     };
     getBlockedUsers(user._id);
   }, [user]);
+
   useEffect(() => {
     if (!user) return;
     const getActiveProfile = async (id) => {
@@ -143,48 +132,6 @@ const AuthContext = ({ children }) => {
     getActiveProfile(user._id);
   }, [user]);
 
-  function refreshUser() {
-    setUser(getUser());
-  }
-
-  function refreshAdmin() {
-    setAdmin(getUser());
-  }
-  // useEffect(() => {
-  //   setAdmin('');
-  //   refreshUser();
-  // }, []);
-
-  async function logIn(values, user) {
-    try {
-      const { data } = await signIn(values);
-      if (!data) return;
-      localStorage.setItem('token', data);
-      setTokenHeader();
-
-      setUser(getUser());
-
-      toast(`welcome ${getUser().name}!`);
-      return user;
-    } catch ({ response }) {
-      setError(response.data);
-    }
-  }
-
-  async function logInAdmin(values) {
-    try {
-      const { data } = await signInAdmin(values);
-
-      localStorage.setItem('token', data);
-      setAdmin(getUser());
-      setTokenHeader();
-
-      toast(`welcome ${getUser().name}!`);
-    } catch ({ response }) {
-      setError(response.data);
-    }
-  }
-  useEffect(() => {}, [admin]);
   async function blockUserById(email, id) {
     const { data } = await blockUser(id, email);
 
@@ -196,6 +143,7 @@ const AuthContext = ({ children }) => {
         ]);
       }
     }
+
     for (let user of otherUsers) {
       if (user._id === data._id) {
         setOtherUsers((otherUsers) => [
@@ -207,6 +155,7 @@ const AuthContext = ({ children }) => {
     setBlockedUsers((blockedUsers) => [...blockedUsers, data]);
     return data;
   }
+
   async function addToFavoritesById(email, id) {
     const { data } = await addToFavorites(id, email);
 
@@ -217,6 +166,7 @@ const AuthContext = ({ children }) => {
 
     return id;
   }
+
   async function removeFromFavoritesById(email, id) {
     const { data } = await removeFromFavorites(id, email);
 
@@ -229,6 +179,7 @@ const AuthContext = ({ children }) => {
 
     return data;
   }
+
   async function unblockUserById(email, id) {
     const { data } = await unblockUser(id, email);
 
@@ -240,29 +191,6 @@ const AuthContext = ({ children }) => {
     return data;
   }
 
-  async function logOut() {
-    localStorage.removeItem('token');
-    if (user) {
-      {
-        await updateOnlineStatus(user.email);
-        refreshUser();
-      }
-    }
-    if (admin) {
-      await updateOnlineStatus(admin.email);
-
-      refreshAdmin();
-    }
-    setIsAdmin(false);
-    setFavoriteUsers([]);
-    setBlockedUsers([]);
-    setActiveUser(null);
-    setOtherUsers([]);
-    setError('');
-    setVipMessage('');
-    setUsersWhoDidNotBlockedMe([]);
-  }
-
   const showAlert = () => {
     setVipMessage('Only for VIP members');
   };
@@ -271,29 +199,15 @@ const AuthContext = ({ children }) => {
     <>
       <context.Provider
         value={{
-          logIn,
-          logOut,
-          signUp,
-          user,
           getUsers,
-          activeUser,
-          updateUser,
-          error,
-          setError,
           addToFavoritesById,
           removeFromFavoritesById,
-          setUser,
+          vipUsers,
           favoriteUsers,
           otherUsers,
-          signUpAdmin,
-          logInAdmin,
-          admin,
-          isAdmin,
-          setIsAdmin,
-          setFavoriteUsers,
+          updateUser,
           updateVip,
-          vipUsers,
-          setVipUsers,
+          setFavoriteUsers,
           isInMainPage,
           setIsInMainPage,
           createVipReq,
@@ -312,7 +226,7 @@ const AuthContext = ({ children }) => {
           showAlert,
           vipMessage,
           setVipMessage,
-
+          setVipUsers,
           getFavorites,
         }}
       >
@@ -322,4 +236,4 @@ const AuthContext = ({ children }) => {
   );
 };
 
-export default AuthContext;
+export default AppContext;

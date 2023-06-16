@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import { useFormik } from 'formik';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import Input from './Input';
@@ -10,36 +11,32 @@ import { Link } from 'react-router-dom';
 import NavBar from './NavBar';
 
 const YourProfile = () => {
-  const {
-    activeUser,
-    user,
-    updateUser,
-    setActiveUser,
-    error,
-    setError,
-    imageUrl,
-    setImageUrl,
-  } = useAuth();
+  const { activeUser, user, setActiveUser, authError, setAuthError } =
+    useAuth();
+
+  const { updateUser, imageUrl, setImageUrl } = useApp();
+
   const navigate = useNavigate();
   const [isDelete, setIsDelete] = useState(false);
+
   useEffect(() => {
     if (!activeUser) return;
     setActiveUser(activeUser);
 
     const {
-      age,
-      _id,
-      vip,
-      createdAt,
-      __v,
-      favorites,
-      blockList,
-      isOnline,
-      socketId,
-      ...rest
+     
+      name,
+      email,
+      image,
+      gender,
+      password,
     } = activeUser;
     form.setValues({
-      ...rest,
+      name,
+      email,
+      password,
+      image,
+      gender,
     });
   }, [activeUser]);
 
@@ -95,8 +92,7 @@ const YourProfile = () => {
         toast(`${activeUser.name}'s profile has been updated`);
         navigate(`/chat-room/${user._id}`);
       } catch ({ response }) {
-        setError(response.data);
-        console.log(response.data);
+        setActiveUser(response.data);
       }
     },
   });
@@ -115,12 +111,12 @@ const YourProfile = () => {
   };
 
   useEffect(() => {
-    setError('');
+    setAuthError('');
   }, []);
   return (
     <>
       <form noValidate onSubmit={form.handleSubmit}>
-        {error && <p className="alert alert-danger">{error}</p>}
+        {authError && <p className="alert alert-danger">{authError}</p>}
         <div className="container">
           {' '}
           <Input

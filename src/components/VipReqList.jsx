@@ -1,20 +1,42 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const VipReqList = () => {
+  const { admin } = useAuth();
   const {
     vipReq,
     setVipReq,
-    admin,
     updateVip,
     setVipUsers,
     deleteVipReq,
     setIsInMainPage,
     isDark,
-  } = useAuth();
+  } = useApp();
 
+  const toggleVip = async ({ target }, req) => {
+    try {
+      await updateVip(admin._id, target.id, req.vip ? false : true);
+      await deleteVipReq(admin._id, target.id);
+      await setVipUsers((vipUsers) => !vipUsers);
+      await setVipReq(vipReq.filter((req) => req.email !== target.id));
+      toast(`${req.email}'s VIP status has updated to ${!req.vip}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteReq = async ({ target }, req) => {
+    try {
+      await deleteVipReq(admin._id, target.id);
+      await setVipReq(vipReq.filter((req) => req.email !== target.id));
+      toast(`Deleted ${req.email}'s req`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Link
@@ -38,35 +60,14 @@ const VipReqList = () => {
                 <li>
                   {' '}
                   Email-
-                  <Link onClick={() => {}} to={`/edit-users/${admin._id}`}>
-                    {' '}
-                    {req.email}
-                  </Link>{' '}
+                  <Link to={`/edit-users/${admin._id}`}> {req.email}</Link>{' '}
                 </li>
               </ul>
               <div className="vip-req-btns-div">
                 <button
                   className="make-vip-btn"
                   id={req.email}
-                  onClick={async ({ target }) => {
-                    try {
-                      await updateVip(
-                        admin._id,
-                        target.id,
-                        req.vip ? false : true
-                      );
-                      await deleteVipReq(admin._id, target.id);
-                      await setVipUsers((vipUsers) => !vipUsers);
-                      await setVipReq(
-                        vipReq.filter((req) => req.email !== target.id)
-                      );
-                      toast(
-                        `${req.email}'s VIP status has updated to ${!req.vip}`
-                      );
-                    } catch (error) {
-                      console.log(error);
-                    }
-                  }}
+                  onClick={(e) => toggleVip(e, req)}
                 >
                   {' '}
                   Make VIP
@@ -74,17 +75,7 @@ const VipReqList = () => {
                 <button
                   className="delete-vip-btn"
                   id={req.email}
-                  onClick={async ({ target }) => {
-                    try {
-                      await deleteVipReq(admin._id, target.id);
-                      await setVipReq(
-                        vipReq.filter((req) => req.email !== target.id)
-                      );
-                      toast(`Deleted ${req.email}'s req`);
-                    } catch (error) {
-                      console.log(error);
-                    }
-                  }}
+                  onClick={(e) => deleteReq(e, req)}
                 >
                   Delete req
                 </button>

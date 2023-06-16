@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 
 const NavBar = () => {
-  const { user, favoriteUsers, setIsAdmin, blockedUsers, isDark } = useAuth();
+  const { user } = useAuth();
+  const { favoriteUsers, blockedUsers } = useApp();
 
   return (
     <>
@@ -89,25 +91,13 @@ const NavBar = () => {
                       className="nav-link active"
                       aria-current="page"
                     >
-                      vip
+                      Vip
                     </Link>
                   </li>
                 ))}
             </ul>
             <ul className="navbar-nav ms-auto ">
-              {!user && (
-                <li className="nav-item ">
-                  <Link
-                    to={'sign-in'}
-                    className="nav-link active"
-                    aria-current="page"
-                  >
-                    Sign In
-                  </Link>
-                </li>
-              )}
-
-              {user && (
+              {user ? (
                 <li className="nav-item ">
                   <Link
                     to={'log-out'}
@@ -115,6 +105,16 @@ const NavBar = () => {
                     aria-current="page"
                   >
                     Log Out
+                  </Link>
+                </li>
+              ) : (
+                <li className="nav-item ">
+                  <Link
+                    to={'sign-in'}
+                    className="nav-link active"
+                    aria-current="page"
+                  >
+                    Sign In
                   </Link>
                 </li>
               )}

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import MainRoom from './MainRoom';
 
 const ChatBar = ({ socket }) => {
-  const { getUsers } = useAuth();
+  const { getUsers } = useApp();
 
   const [users, setUsers] = useState();
 

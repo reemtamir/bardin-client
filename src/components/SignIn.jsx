@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Input from './Input';
 import { useAuth } from '../hooks/useAuth';
 import joi from 'joi';
@@ -7,9 +7,19 @@ import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
 
 const SignIn = () => {
-  const { user, logIn, setError, error } = useAuth();
+  const { user, logIn, authError, setAuthError } = useAuth();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) return;
+    navigate(`/chat-room/${user._id}`);
+  }, [user, navigate]);
+
+  useEffect(() => {
+    setAuthError('');
+  }, []);
+
   const form = useFormik({
     validateOnMount: true,
     initialValues: {
@@ -23,7 +33,7 @@ const SignIn = () => {
         // socket.emit('newUser', { userName: user.email, socketID: socket.id });
         // console.log('socket', socket);
       } catch (error) {
-        setError(error);
+        setAuthError(error);
       }
     },
     validate: formikValidateUsingJoi({
@@ -42,17 +52,9 @@ const SignIn = () => {
     }),
   });
 
-  useEffect(() => {
-    if (!user) return;
-
-    navigate(`/chat-room/${user._id}`);
-  }, [user, navigate]);
-  useEffect(() => {
-    setError('');
-  }, []);
   return (
     <>
-      {error && <div className="alert alert-danger">{error}</div>}
+      {authError && <div className="alert alert-danger">{authError}</div>}
       <form noValidate onSubmit={form.handleSubmit}>
         <div className=" container ">
           <div className=" input-div ">

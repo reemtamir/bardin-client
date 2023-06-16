@@ -1,20 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import Home from './Home';
 import AdminNavBar from './AdminNavBar';
 
 const AdminPage = () => {
-  const { admin, getUsers, setIsInMainPage } = useAuth();
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const getAllUsers = async () => {
-      const allUsers = await getUsers();
-      setUsers(allUsers);
-    };
-    getAllUsers();
-  }, []);
+  const { admin, setIsAdmin } = useAuth();
+  const { setIsInMainPage } = useApp();
 
   return (
     <>

@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import ShowUsers from './ShowUsers';
 import ShowFavoriteUsersUsers from './ShowFavoriteUsersUsers';
 import UserProfileDisplay from './UserProfileDisplay';
 
 const MainRoom = () => {
+  const { user, setIsAdmin } = useAuth();
+  
   const {
     addToFavoritesById,
     removeFromFavoritesById,
     favoriteUsers,
     otherUsers,
-    user,
     showAlert,
     vipMessage,
     setVipMessage,
-    setIsAdmin,
-  } = useAuth();
+  } = useApp();
+
   useEffect(() => {
     setVipMessage('');
     setIsAdmin(false);
   }, []);
+
   return (
     <>
       <div className="my-profile">

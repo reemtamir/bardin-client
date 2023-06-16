@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import AuthContext from './components/AuthContext';
+import AppContext from './contexts/AppContext';
+import AuthContext from './contexts/AuthContext';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -13,7 +14,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthContext>
-        <App />
+        <AppContext>
+          <App />
+        </AppContext>
       </AuthContext>
     </BrowserRouter>
   </React.StrictMode>

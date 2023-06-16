@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { deleteUser } from '../utils/axios';
+import { deleteUser } from '../utils/axiosApp';
 import { toast } from 'react-toastify';
+
 const DeleteProfile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -27,6 +28,7 @@ const DeleteProfile = () => {
 
     remove();
   }, []);
+
   return null;
 };
 

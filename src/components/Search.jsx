@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import ShowUsers from './ShowUsers';
 import ShowFavoriteUsersUsers from './ShowFavoriteUsersUsers';
 
@@ -11,7 +11,7 @@ const Search = () => {
     showAlert,
     addToFavoritesById,
     blockedUsers,
-  } = useAuth();
+  } = useApp();
 
   const [usersToShow, setUsersToShow] = useState([]);
   const [filteredUsersToShow, setFilteredUsersToShow] = useState([]);
@@ -52,18 +52,6 @@ const Search = () => {
           type="text"
         />
       </div>
-
-      {/* <div>
-        <label htmlFor="">Male</label>
-
-        <input type="checkbox" name="male" />
-        <label htmlFor="">Female</label>
-
-        <input type="checkbox" name="female" />
-        <label htmlFor="">Non Binary</label>
-
-        <input type="checkbox" name="non-binary" />
-      </div> */}
       <div className="d-flex">
         <div className="users">
           {favoriteUsers.length ? (

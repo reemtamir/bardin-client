@@ -27,6 +27,7 @@ import ShowUsers from './components/ShowUsers';
 import SignUpAdmin from './components/SignUpAdmin';
 import SignInAdmin from './components/SignInAdmin';
 import { useAuth } from './hooks/useAuth';
+import { useApp } from './hooks/useApp';
 import AdminPrivateRout from './components/AdminPrivateRout';
 import AdminPage from './components/AdminPage';
 import AdminEditPage from './components/AdminEditPage';
@@ -46,15 +47,14 @@ import { Link } from 'react-router-dom';
 
 const socket = socketIO.connect('http://localhost:3002');
 function App() {
+  const { isAdmin, user, admin, setIsAdmin } = useAuth();
   const {
     favoriteUsers,
     removeFromFavoritesById,
-    isAdmin,
-    user,
-    admin,
     isDark,
     setIsDark,
-  } = useAuth();
+    showAlert,
+  } = useApp();
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [randomColor, setRandomColor] = useState(getRandomColor());
@@ -77,10 +77,6 @@ Admin will approve it.`,
 
     `Good luck and enjoy`,
   ];
-
-  const showAlert = () => {
-    setVipMessage('Only for VIP members');
-  };
 
   useEffect(() => {
     let logInTimeOutId;
@@ -307,9 +303,8 @@ Admin will approve it.`,
           </Routes>
         )}
         <div className="space"></div>
-        <div>
-          <Footer />
-        </div>
+
+        <Footer />
       </div>
     </>
   );

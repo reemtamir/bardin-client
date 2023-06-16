@@ -4,34 +4,36 @@ import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import { useNavigate } from 'react-router-dom';
 import Input from './Input';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+
 const VipReq = () => {
+  const { authError, setAuthError, activeUser } = useAuth();
   const {
     createVipReq,
     setVipReq,
-    error,
-    setError,
-    activeUser,
     setIsInMainPage,
     isDark,
-  } = useAuth();
+  } = useApp();
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    setError('');
+    setAuthError('');
   }, []);
 
   useEffect(() => {
     if (!activeUser) return;
 
-    const { email, ...rest } = activeUser;
+    const { email } = activeUser;
     form.setValues({
       email: email,
     });
   }, [activeUser]);
+  
   const form = useFormik({
     validateOnMount: true,
     initialValues: {
@@ -53,7 +55,7 @@ const VipReq = () => {
         );
         navigate('/thank-you');
       } catch ({ response }) {
-        setError(response.data);
+        setAuthError(response.data);
       }
     },
     validate: formikValidateUsingJoi({
@@ -70,7 +72,7 @@ const VipReq = () => {
   return (
     <>
       <form noValidate onSubmit={form.handleSubmit}>
-        {error && <div className="alert alert-danger">{error}</div>}
+        {authError && <div className="alert alert-danger">{authError}</div>}
 
         <Link
           style={{ color: isDark ? 'white' : 'black' }}

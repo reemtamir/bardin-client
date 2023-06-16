@@ -1,9 +1,11 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import { Navigate } from 'react-router-dom';
 
 const FavoritesPrivateRout = ({ children }) => {
-  const { favoriteUsers, user } = useAuth();
+  const { user } = useAuth();
+  const { favoriteUsers } = useApp();
 
   if (!favoriteUsers.length) {
     return <Navigate to={`/chat-room/${user._id}`} />;

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 const Information = ({ text, linkStr }) => {
   const { isAdmin } = useAuth();
   const [h1, p1, p2, p3, h2] = text;
+
   return (
     <>
       {isAdmin && <AdminNavBar />}

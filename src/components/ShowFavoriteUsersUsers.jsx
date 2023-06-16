@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 
 const ShowFavoriteUsersUsers = ({ str, fn, blockFn }) => {
-  const { favoriteUsers, user, blockUserById } = useAuth();
+  const { user } = useAuth();
+  const { favoriteUsers, blockUserById } = useApp();
   const [blockedUser, setBlockedUser] = useState(null);
-
+  const blockUser = async () => {
+    const data = await blockUserById(user.email, blockedUser.id);
+    setBlockedUser(null);
+    return data;
+  };
   return (
     <>
       {favoriteUsers.map((element, index) => {
@@ -79,11 +85,7 @@ const ShowFavoriteUsersUsers = ({ str, fn, blockFn }) => {
             </button>
             <button
               style={{ textDecoration: 'none', color: 'black' }}
-              onClick={async () => {
-                const data = await blockUserById(user.email, blockedUser.id);
-                setBlockedUser(null);
-                return data;
-              }}
+              onClick={blockUser}
               className="block-alert-btn-block "
             >
               {' '}

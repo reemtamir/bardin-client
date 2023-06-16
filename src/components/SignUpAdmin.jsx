@@ -7,10 +7,16 @@ import { useFormik } from 'formik';
 import joi from 'joi';
 import AdminNavBar from './AdminNavBar';
 import { toast } from 'react-toastify';
+
 const SignUpAdmin = () => {
-  const { signUpAdmin, error, setError } = useAuth();
+  const { signUpAdmin, authError, setAuthError } = useAuth();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setAuthError('');
+  }, []);
+
   const form = useFormik({
     validateOnMount: true,
     initialValues: {
@@ -27,7 +33,7 @@ const SignUpAdmin = () => {
         toast(`Admin ${data.name} has created`);
         navigate('/sign-in-admin');
       } catch ({ response }) {
-        setError(response.data);
+        setAuthError(response.data);
       }
     },
     validate: formikValidateUsingJoi({
@@ -60,14 +66,11 @@ const SignUpAdmin = () => {
     }),
   });
 
-  useEffect(() => {
-    setError('');
-  }, []);
   return (
     <>
       <AdminNavBar />
       <form noValidate onSubmit={form.handleSubmit}>
-        {error && <div className="alert alert-danger">{error}</div>}
+        {authError && <div className="alert alert-danger">{authError}</div>}
         <div className="container">
           <Input
             label={'Name'}

@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 
 const ShowUsers = ({ users, str, fn, blockFn }) => {
-  const { user, blockUserById } = useAuth();
+  const { user } = useAuth();
+  const { blockUserById } = useApp();
   const [blockedUser, setBlockedUser] = useState(null);
   const navigate = useNavigate();
-
+  const blockUser = async () => {
+    const data = await blockUserById(user.email, blockedUser.id);
+    setBlockedUser(null);
+    return data;
+  };
   if (!users) return;
 
   return (
@@ -84,11 +90,7 @@ const ShowUsers = ({ users, str, fn, blockFn }) => {
             </button>
             <button
               style={{ textDecoration: 'none', color: 'black' }}
-              onClick={async () => {
-                const data = await blockUserById(user.email, blockedUser.id);
-                setBlockedUser(null);
-                return data;
-              }}
+              onClick={blockUser}
               className=" block-alert-btn-block "
             >
               {' '}

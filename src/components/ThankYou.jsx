@@ -1,15 +1,20 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
+
 const ThankYou = () => {
-  const { user, setVipMessage } = useAuth();
+  const { user } = useAuth();
+  const { setVipMessage } = useApp();
   const navigate = useNavigate();
+
   useEffect(() => {
     setVipMessage('');
     setTimeout(() => {
       navigate(`/chat-room/${user._id}`);
     }, 3000);
   }, [navigate, user._id]);
+
   return (
     <div>
       <div className="thank-you">

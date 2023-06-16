@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import joi from 'joi';
 import { formikValidateUsingJoi } from '../utils/formikValidateUsingJio';
 import { useFormik } from 'formik';
 import { useAuth } from '../hooks/useAuth';
+import { useApp } from '../hooks/useApp';
 import { useNavigate } from 'react-router-dom';
 import Input from './Input';
 import Joi from 'joi';
 import { toast } from 'react-toastify';
+
 const SignUp = () => {
-  const { signUp, error, setError, imageUrl, setImageUrl } = useAuth();
+  const { signUp, authError, setAuthError } = useAuth();
+  const { imageUrl, setImageUrl } = useApp();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setError('');
+    setAuthError('');
   }, []);
-  const navigate = useNavigate();
+
   const form = useFormik({
     validateOnMount: true,
     initialValues: {
@@ -34,7 +38,7 @@ const SignUp = () => {
         toast(` ${data.name} has just created 🙂`);
         navigate('/sign-in');
       } catch ({ response }) {
-        setError(response.data);
+        setAuthError(response.data);
       }
     },
     validate: formikValidateUsingJoi({
@@ -87,7 +91,7 @@ const SignUp = () => {
   return (
     <>
       <form noValidate onSubmit={form.handleSubmit}>
-        {error && <div className="alert alert-danger">{error}</div>}
+        {authError && <div className="alert alert-danger">{authError}</div>}
         <div className="container">
           {' '}
           <Input

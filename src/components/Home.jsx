@@ -1,9 +1,10 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { Link } from 'react-router-dom';
-import AdminNavBar from './AdminNavBar';
+
 const Home = ({ img, linkLetsGoStr, linkToInfo }) => {
-  const { activeUser, setIsAdmin, isAdmin } = useAuth();
+  const { user, activeUser, setIsAdmin, isAdmin } = useAuth();
+
   return (
     <div className="container">
       <div className="btns-div">
@@ -11,7 +12,7 @@ const Home = ({ img, linkLetsGoStr, linkToInfo }) => {
           <button type="submit" className="sign-in-btn">
             {' '}
             <Link
-              to={activeUser ? `/chat-room/${activeUser._id}` : linkLetsGoStr}
+              to={user ? `/chat-room/${activeUser._id}` : linkLetsGoStr}
               className="link-to-sign-up "
             >
               {' '}
