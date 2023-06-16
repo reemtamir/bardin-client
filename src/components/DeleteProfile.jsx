@@ -14,7 +14,7 @@ const DeleteProfile = () => {
       await deleteUser(id);
       logOut();
       navigate('/sign-up');
-      toast(`${user.email} has been deleted`, {
+      toast(`${user.email} has been deleted!`, {
         position: 'top-center',
         autoClose: 1000,
         hideProgressBar: false,
