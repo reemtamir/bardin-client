@@ -9,7 +9,6 @@ import joi from 'joi';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
-
 const YourProfile = () => {
   const { activeUser, user, setActiveUser, authError, setAuthError } =
     useAuth();
@@ -23,13 +22,7 @@ const YourProfile = () => {
     if (!activeUser) return;
     setActiveUser(activeUser);
 
-    const {
-      name,
-      email,
-      image,
-      gender,
-      password,
-    } = activeUser;
+    const { name, email, image, gender, password } = activeUser;
     form.setValues({
       name,
       email,
@@ -114,6 +107,13 @@ const YourProfile = () => {
   }, []);
   return (
     <>
+      <div className="info-div">
+        {' '}
+        <p className="info-h2">
+          You MUST fill the password and confirmed password fields.
+        </p>
+      </div>
+
       <form noValidate onSubmit={form.handleSubmit}>
         {authError && <p className="alert alert-danger">{authError}</p>}
         <div className="container">

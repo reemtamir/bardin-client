@@ -7,6 +7,7 @@ const Home = ({ img, linkLetsGoStr, linkToInfo }) => {
 
   return (
     <div className="container">
+      <h1 className="text-danger">Please read USER / ADMIN information </h1>
       <div className="btns-div">
         <div className="user-btns-div">
           <button type="submit" className="sign-in-btn">

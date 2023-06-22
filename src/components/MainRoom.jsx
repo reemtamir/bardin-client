@@ -98,7 +98,7 @@ const MainRoom = () => {
         ) : (
           <div className="users">
             <ShowUsers
-              users={otherUsers.filter((user, index) => index % 3 !== 1)}
+              users={otherUsers.filter((user, index) => index % 2 === 0)}
               str={'bi bi-star'}
               blockFn={showAlert}
               fn={showAlert}
