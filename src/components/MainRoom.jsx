@@ -19,6 +19,7 @@ const MainRoom = () => {
     vipMessage,
     setVipMessage,
     setOtherUsers,
+    setFavoriteUsers,
   } = useApp();
   const { setChat, setUsersInChat, setAlert } = useChat();
 
@@ -38,9 +39,25 @@ const MainRoom = () => {
       }),
     ]);
   });
+  socket.on('onLine', (data) => {
+    setFavoriteUsers([
+      ...favoriteUsers.map((u) => {
+        if (u.email === data.email) {
+          return { ...u, isOnline: true };
+        } else return u;
+      }),
+    ]);
+  });
   socket.on('offLine', (data) => {
     setOtherUsers([
       ...otherUsers.map((u) => {
+        if (u.email === data.email) {
+          return { ...u, isOnline: false };
+        } else return u;
+      }),
+    ]);
+    setFavoriteUsers([
+      ...favoriteUsers.map((u) => {
         if (u.email === data.email) {
           return { ...u, isOnline: false };
         } else return u;
