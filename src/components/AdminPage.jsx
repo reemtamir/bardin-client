@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useApp } from '../hooks/useApp';
@@ -6,7 +6,7 @@ import Home from './Home';
 import AdminNavBar from './AdminNavBar';
 
 const AdminPage = () => {
-  const { admin, setIsAdmin } = useAuth();
+  const { admin } = useAuth();
   const { setIsInMainPage } = useApp();
 
   return (

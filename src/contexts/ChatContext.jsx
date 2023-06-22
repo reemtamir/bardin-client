@@ -15,7 +15,7 @@ const ChatContext = ({ children }) => {
   const [messageOnChat, setMessageOnChat] = useState([]);
   const [alert, setAlert] = useState('');
   const [error, setError] = useState('');
-  const { socket, activeUser } = useAuth();
+  const { activeUser } = useAuth();
 
   const getUsers = async (user1, user2) => {
     const sender = await myProfileByEmail(user1);

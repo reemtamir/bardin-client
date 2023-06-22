@@ -78,7 +78,7 @@ export const updateVip = async (id, email, isVip) => {
 
 export const deleteVipReq = async (id, email) => {
   try {
-    const { data } = await axios.post(`/admin/delete-vip-req/${id}`, {
+    await axios.post(`/admin/delete-vip-req/${id}`, {
       email,
     });
   } catch ({ response }) {
