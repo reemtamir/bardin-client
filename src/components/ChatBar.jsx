@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { useApp } from '../hooks/useApp';
-import MainRoom from './MainRoom';
+import React from 'react';
+import { useChat } from '../hooks/useChat';
 
-const ChatBar = ({ socket }) => {
-  const { getUsers } = useApp();
+const ChatBar = () => {
+  const { usersInChat } = useChat();
 
-  const [users, setUsers] = useState();
+  if (!usersInChat) return;
 
-  useEffect(() => {
-    const getAllUsers = async function () {
-      const data = await getUsers();
+  return (
+    <>
+      <div className="chat-users-div">
+        <div className="sender">
+          <p>{usersInChat[0]?.name}</p>
+          <img
+            style={{ width: '75px' }}
+            src={usersInChat[0]?.image}
+            alt={usersInChat[0]?.name}
+          />
+        </div>
 
-      setUsers(data);
-    };
+        <div className="receiver">
+          <p>{usersInChat[1]?.name}</p>
 
-    getAllUsers();
-  }, []);
-
-  useEffect(() => {
-    socket.on('newUserResponse', (data) => {
-      // setUsers(data);
-    });
-  }, [socket, users]);
-  if (!users) return;
-  return <div className="container">{<MainRoom />}</div>;
+          <img
+            style={{ width: '75px' }}
+            src={usersInChat[1]?.image}
+            alt={usersInChat[1]?.name}
+          />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default ChatBar;

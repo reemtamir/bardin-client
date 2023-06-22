@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { createContext, useState } from 'react';
 import { toast } from 'react-toastify';
+
+import { myProfile, updateOnlineStatus } from '../utils/axiosApp';
+import { socket } from '../utils/axiosChat';
+
 import {
   getUser,
   signIn,
@@ -9,7 +13,6 @@ import {
   signInAdmin,
   setTokenHeader,
 } from '../utils/axiosAuth';
-import { myProfile, updateOnlineStatus } from '../utils/axiosApp';
 
 export const context = createContext(null);
 
@@ -50,7 +53,8 @@ const AuthContext = ({ children }) => {
       localStorage.setItem('token', data);
 
       setTokenHeader();
-
+      socket.connect();
+      socket.emit('connection', getUser().email);
       toast(`welcome ${getUser().name}!`);
 
       return setUser(getUser());
@@ -79,11 +83,15 @@ const AuthContext = ({ children }) => {
 
     if (user) {
       await updateOnlineStatus(user.email);
+
+      socket.emit('offLine', user.email);
       return refreshUser();
     } else if (admin) {
       await updateOnlineStatus(admin.email);
       return refreshAdmin();
     }
+
+    socket.disconnect();
   }
 
   return (
@@ -104,6 +112,7 @@ const AuthContext = ({ children }) => {
           isAdmin,
           setIsAdmin,
           setActiveUser,
+          socket,
         }}
       >
         {children}

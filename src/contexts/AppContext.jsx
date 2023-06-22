@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { createContext, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-
 import {
   getUsers,
   myProfile,
@@ -33,7 +32,7 @@ const AppContext = ({ children }) => {
   const [imageUrl, setImageUrl] = useState('');
   const [vipMessage, setVipMessage] = useState('');
   const [isDark, setIsDark] = useState(false);
-  
+
   useEffect(() => {
     const getVips = async () => {
       const { data } = await getVipReq();
@@ -205,6 +204,7 @@ const AppContext = ({ children }) => {
           vipUsers,
           favoriteUsers,
           otherUsers,
+          setOtherUsers,
           updateUser,
           updateVip,
           setFavoriteUsers,
@@ -218,6 +218,7 @@ const AppContext = ({ children }) => {
           blockUserById,
           unblockUserById,
           blockedUsers,
+          setBlockedUsers,
           imageUrl,
           setImageUrl,
           isDark,
@@ -228,6 +229,7 @@ const AppContext = ({ children }) => {
           setVipMessage,
           setVipUsers,
           getFavorites,
+          setUsersWhoDidNotBlockedMe,
         }}
       >
         {children}

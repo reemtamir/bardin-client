@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useApp } from '../hooks/useApp';
+import { useChat } from '../hooks/useChat';
 
 const ShowFavoriteUsersUsers = ({ str, fn, blockFn }) => {
   const { user } = useAuth();
   const { favoriteUsers, blockUserById } = useApp();
+  const { fetchChat } = useChat();
   const [blockedUser, setBlockedUser] = useState(null);
   const blockUser = async () => {
     const data = await blockUserById(user.email, blockedUser.id);
@@ -63,9 +65,15 @@ const ShowFavoriteUsersUsers = ({ str, fn, blockFn }) => {
                 </li>
               </ul>
             </div>
-            <Link className="link" to="/private">
-              Send private message
-            </Link>
+            <div>
+              <Link
+                className="link"
+                to="/private"
+                onClick={() => fetchChat(user, element)}
+              >
+                Send private message
+              </Link>
+            </div>
           </div>
         );
       })}

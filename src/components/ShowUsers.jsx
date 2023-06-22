@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useApp } from '../hooks/useApp';
+import { useChat } from '../hooks/useChat';
 
 const ShowUsers = ({ users, str, fn, blockFn }) => {
   const { user } = useAuth();
   const { blockUserById } = useApp();
+  const { fetchChat } = useChat();
   const [blockedUser, setBlockedUser] = useState(null);
   const navigate = useNavigate();
   const blockUser = async () => {
@@ -13,6 +15,7 @@ const ShowUsers = ({ users, str, fn, blockFn }) => {
     setBlockedUser(null);
     return data;
   };
+
   if (!users) return;
 
   return (
@@ -68,9 +71,15 @@ const ShowUsers = ({ users, str, fn, blockFn }) => {
                 </li>
               </ul>
             </div>
-            <Link className="link" to="/private">
-              Send private message
-            </Link>
+            <div>
+              <Link
+                className="link"
+                to="/private"
+                onClick={() => fetchChat(user, element)}
+              >
+                Send private message
+              </Link>
+            </div>
           </div>
         );
       })}

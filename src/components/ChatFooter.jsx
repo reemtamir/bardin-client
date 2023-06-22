@@ -1,45 +1,56 @@
-import React from 'react';
-
+import { React } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useChat } from '../hooks/useChat';
 
-const ChatFooter = ({ socket }) => {
-  const { id } = useParams();
-  const { activeUser, user } = useAuth();
-  const [message, setMessage] = useState('');
-  const [onlineUser, setOnlineUser] = useState();
-  // useEffect(() => {
-  //   const getUser = async function () {
-  //     const { data } = await myProfile(id);
-  //     setOnlineUser(data);
-  //     socket.emit('newUser', data);
-  //   };
-  //   getUser();
-  // }, [user]);
+const ChatFooter = ({ message, setMessage }) => {
+  const { activeUser, socket } = useAuth();
+  const {
+    setMessageOnChat,
+    messageOnChat,
+    usersInChat,
+    chat,
+    setChat,
+    typingStatus,
+  } = useChat();
   const handleTyping = () => {
-    socket.emit('typing', `${onlineUser.name} is typing`);
+    socket.emit('typing', {
+      socketId: usersInChat[1].socketId,
+      userId: activeUser._id,
+    });
   };
   const handleNotTyping = () => {
-    setTimeout(() => {
-      socket.emit('typing', ``);
-    }, 2000);
+    socket.emit('notTyping', { socketId: usersInChat[1].socketId });
   };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (message.trim() && onlineUser) {
+    if (message && activeUser) {
       socket.emit('message', {
-        text: message,
-        name: onlineUser.name,
-        id: `${socket.id}${Math.random()}`,
-        socketID: socket.id,
+        from: activeUser.email,
+        to: usersInChat[1].email,
+        text: message.trim(),
       });
     }
     setMessage('');
+    setMessageOnChat((messages) => [
+      ...messages,
+      { from: activeUser.email, to: usersInChat[1].email, text: message },
+    ]);
+
+    setChat({
+      ...chat,
+      messages: [
+        ...messageOnChat,
+        { from: activeUser.email, to: usersInChat[1].email, text: message },
+      ],
+    });
   };
   return (
     <div className="chat__footer">
+      {/*This is triggered when a user is typing*/}
+      <div className="message__status">
+        <p>{typingStatus}</p>
+      </div>
       <form className="form" onSubmit={handleSendMessage}>
         <input
           type="text"

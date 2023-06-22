@@ -8,7 +8,7 @@ import Input from './Input';
 import joi from 'joi';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import NavBar from './NavBar';
+
 
 const YourProfile = () => {
   const { activeUser, user, setActiveUser, authError, setAuthError } =
@@ -24,7 +24,6 @@ const YourProfile = () => {
     setActiveUser(activeUser);
 
     const {
-     
       name,
       email,
       image,

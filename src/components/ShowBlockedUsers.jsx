@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useApp } from '../hooks/useApp';
 
 const ShowBlockedUsers = () => {
   const { user } = useAuth();
+
   const { unblockUserById, blockedUsers } = useApp();
   const [blockedUser, setBlockedUser] = useState(null);
 
@@ -12,6 +13,10 @@ const ShowBlockedUsers = () => {
     setBlockedUser(null);
     return data;
   };
+
+  useEffect(() => {
+    if (!user) setBlockedUser([]);
+  }, [user]);
 
   return (
     <>

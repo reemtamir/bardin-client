@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useApp } from '../hooks/useApp';
+import { useChat } from '../hooks/useChat';
 
 const NavBar = () => {
   const { user } = useAuth();

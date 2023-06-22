@@ -10,7 +10,6 @@ import '../src/styles/admin-page.scss';
 import '../src/styles/blocked.scss';
 import '../src/styles/info.scss';
 
-import socketIO from 'socket.io-client';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import PrivateRout from './components/PrivateRout';
 import Home from './components/Home';
@@ -22,12 +21,13 @@ import FavoritesPrivateRout from './components/FavoritesPrivateRout';
 import YourProfile from './components/YourProfile';
 import LogOut from './components/LogOut';
 import DeleteProfile from './components/DeleteProfile';
-import ChatPage from './components/ChatPage';
+import PrivateChat from './components/PrivateChat';
 import ShowUsers from './components/ShowUsers';
 import SignUpAdmin from './components/SignUpAdmin';
 import SignInAdmin from './components/SignInAdmin';
 import { useAuth } from './hooks/useAuth';
 import { useApp } from './hooks/useApp';
+import { useChat } from './hooks/useChat';
 import AdminPrivateRout from './components/AdminPrivateRout';
 import AdminPage from './components/AdminPage';
 import AdminEditPage from './components/AdminEditPage';
@@ -39,22 +39,19 @@ import BlockedPrivateRout from './components/BlockedPrivateRout';
 import ShowBlockedUsers from './components/ShowBlockedUsers';
 import Information from './components/Information';
 import Search from './components/Search';
+import MainRoom from './components/MainRoom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import { getRandomColor } from './utils/randomColor';
 import { Link } from 'react-router-dom';
 
-const socket = socketIO.connect('http://localhost:3002');
 function App() {
-  const { isAdmin, user, admin, setIsAdmin } = useAuth();
-  const {
-    favoriteUsers,
-    removeFromFavoritesById,
-    isDark,
-    setIsDark,
-    showAlert,
-  } = useApp();
+  const { isAdmin, user, admin, socket } = useAuth();
+  const { favoriteUsers, removeFromFavoritesById, isDark, setIsDark } =
+    useApp();
+  const { showAlert, alert, chat, setMessageOnChat, messageOnChat, setAlert } =
+    useChat();
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [randomColor, setRandomColor] = useState(getRandomColor());
@@ -62,13 +59,13 @@ function App() {
   const userHomePage = [
     'Welcome to Bardin app',
     'In this app you can communicate and find new people',
-    `  You will be able to  sign in after registration, see who's online and edit your account. When edit your account, you MUST fill the password and confirmed password fields.
+    `  You will be able to  sign in after registration, see who's online, send private messages and edit your account. When edit your account, you MUST fill the password and confirmed password fields.
      you won't be able to see all users. That you can do when you become VIP member.
 `,
     ` As a VIP member, you also can search for users, add  users to your favorites list or block them. 
  Send a VIP req and wait until
 Admin will approve it.`,
-    `Good luck and enjoy----> please ignore the parts with the commented code of the chat. this code is still in progress`,
+    `Good luck and enjoy`,
   ];
 
   const adminHomePage = [
@@ -127,6 +124,11 @@ Admin will approve it.`,
         ></i>
 
         <header>{!isAdmin && <NavBar />}</header>
+        {alert && (
+          <div className=" alert-div">
+            {<p className="new-alert">{alert}</p>}
+          </div>
+        )}
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -178,9 +180,9 @@ Admin will approve it.`,
               }
             ></Route>
             <Route path="sign-up-admin" element={<SignUpAdmin />}></Route>
-            <Route path="sign-in" element={<SignIn socket={socket} />}></Route>
-            <Route path="log-out" element={<LogOut socket={socket} />}></Route>
-
+            <Route path="sign-in" element={<SignIn />}></Route>
+            <Route path="log-out" element={<LogOut />}></Route>
+            <Route path="private" element={<PrivateChat />}></Route>
             <Route path="sign-in-admin" element={<SignInAdmin />}></Route>
 
             <Route path="admin-page" element={<AdminPage />}></Route>
@@ -207,7 +209,7 @@ Admin will approve it.`,
               path="chat-room/:id"
               element={
                 <PrivateRout>
-                  <ChatPage socket={socket} />
+                  <div className="container">{<MainRoom />}</div>
                 </PrivateRout>
               }
             ></Route>
