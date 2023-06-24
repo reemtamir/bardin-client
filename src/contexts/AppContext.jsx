@@ -16,6 +16,7 @@ import {
   unblockUser,
   getUsersWhoDidNotBlockedMe,
   updateVip,
+  updatePass,
 } from '../utils/axiosApp';
 
 export const context = createContext(null);
@@ -230,6 +231,7 @@ const AppContext = ({ children }) => {
           setVipUsers,
           getFavorites,
           setUsersWhoDidNotBlockedMe,
+          updatePass,
         }}
       >
         {children}

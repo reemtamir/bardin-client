@@ -45,6 +45,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import { getRandomColor } from './utils/randomColor';
 import { Link } from 'react-router-dom';
+import EditPassword from './components/EditPassword';
 
 function App() {
   const { isAdmin, user, admin, socket } = useAuth();
@@ -59,7 +60,7 @@ function App() {
   const userHomePage = [
     'Welcome to Bardin app',
     'In this app you can communicate and find new people',
-    `  You will be able to  sign in after registration, see who's online, send private messages and edit your account. When edit your account, you MUST fill the password and confirmed password fields.
+    `  You will be able to  sign in after registration, see who's online, send private messages and edit your account. 
      you won't be able to see all users. That you can do when you become VIP member.
 `,
     ` As a VIP member, you also can search for users, add  users to your favorites list or block them. 
@@ -226,6 +227,14 @@ Admin will approve it.`,
               element={
                 <PrivateRout>
                   <YourProfile />
+                </PrivateRout>
+              }
+            ></Route>
+            <Route
+              path="me/edit-pass/:id"
+              element={
+                <PrivateRout>
+                  <EditPassword />
                 </PrivateRout>
               }
             ></Route>

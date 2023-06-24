@@ -22,11 +22,10 @@ const YourProfile = () => {
     if (!activeUser) return;
     setActiveUser(activeUser);
 
-    const { name, email, image, gender, password } = activeUser;
+    const { name, email, image, gender } = activeUser;
     form.setValues({
       name,
       email,
-      password,
       image,
       gender,
     });
@@ -39,8 +38,6 @@ const YourProfile = () => {
       email: '',
       image: '',
       gender: '',
-      password: '',
-      confirmedPassword: '',
     },
     validate: formikValidateUsingJoi({
       name: joi
@@ -56,14 +53,6 @@ const YourProfile = () => {
         .max(255)
         .required()
         .email({ tlds: { allow: false } }),
-      password: joi
-        .string()
-        .min(6)
-        .max(1024)
-        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/)
-
-        .label('password'),
-      confirmedPassword: joi.any().equal(joi.ref('password')),
 
       gender: joi.string(),
 
@@ -71,7 +60,7 @@ const YourProfile = () => {
     }),
 
     async onSubmit(values) {
-      let { confirmedPassword, image, ...body } = values;
+      let { image, ...body } = values;
 
       try {
         const { data } = await updateUser(user._id, {
@@ -84,7 +73,7 @@ const YourProfile = () => {
         toast(`${activeUser.name}'s profile has been updated`);
         navigate(`/chat-room/${user._id}`);
       } catch ({ response }) {
-        setActiveUser(response.data);
+        setAuthError(response.data);
       }
     },
   });
@@ -107,13 +96,6 @@ const YourProfile = () => {
   }, []);
   return (
     <>
-      <div className="info-div">
-        {' '}
-        <p className="info-h2">
-          You MUST fill the password and confirmed password fields.
-        </p>
-      </div>
-
       <form noValidate onSubmit={form.handleSubmit}>
         {authError && <p className="alert alert-danger">{authError}</p>}
         <div className="container">
@@ -142,36 +124,7 @@ const YourProfile = () => {
             error={form.touched.email && form.errors.email}
           />
         </div>
-        <div className="container">
-          {' '}
-          <Input
-            {...form.getFieldProps('password')}
-            label={'Password'}
-            type="password"
-            id="password"
-            value={form.password}
-            placeholder="Choose Password"
-            labelClass={'label'}
-            inputClass={'input'}
-            error={form.touched.password && form.errors.password}
-          />
-        </div>
-        <div className="container">
-          {' '}
-          <Input
-            {...form.getFieldProps('confirmedPassword')}
-            label={'Confirm Password'}
-            type="password"
-            id="confirm-password"
-            value={form.confirmedPassword}
-            placeholder="Confirm Password"
-            labelClass={'label'}
-            inputClass={'input'}
-            error={
-              form.touched.confirmedPassword && form.errors.confirmedPassword
-            }
-          />
-        </div>
+
         <div className="flex-row">
           <div className="container">
             <Input
@@ -222,6 +175,10 @@ const YourProfile = () => {
             accept="image/png, image/jpeg"
             error={form.touched.image && form.errors.image}
           />
+
+          <Link className="edit-pass" to={`/me/edit-pass/${activeUser._id}`}>
+            Edit your password
+          </Link>
           <button type="submit" className="sign-up-btn">
             Save changes
           </button>

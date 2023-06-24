@@ -77,3 +77,11 @@
   color: rgb(10, 194, 40);
   font-size: 3rem;
 }
+.edit-pass {
+  @extend .my-card-link;
+  color: rgb(46, 181, 172);
+  font-size: 2rem;
+  &:hover {
+    color: aquamarine;
+  }
+}

@@ -48,6 +48,9 @@ export async function updateUser(id, user) {
   return await axios.put(`/me/edit/${id}`, user);
 }
 
+export async function updatePass(id, currPass, newPass) {
+  return await axios.put(`/me/edit-pass/${id}`, { currPass, newPass });
+}
 export async function deleteUser(id) {
   return await axios.delete(`/me/delete/${id}`);
 }
